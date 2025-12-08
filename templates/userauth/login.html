@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  
+</head>
+
+<body class="h-full bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased">
+    <!-- Page background -->
+    <div class="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-500/10 via-transparent to-indigo-500/10"></div>
+
+    <main class="min-h-full flex items-center justify-center p-6">
+        <div class="w-full max-w-md">
+            <!-- Card -->
+            <div
+                class="relative rounded-2xl border border-zinc-200/60 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur shadow-[0_20px_60px_rgba(2,6,23,0.18)]">
+                <!-- Accent bar -->
+                <div class="h-1.5 w-full rounded-t-2xl bg-gradient-to-r from-indigo-500 via-indigo-500 to-indigo-500">
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <header class="mbb-3">
+                        <div
+                            class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500 text-white shadow-lg shadow-indigo-500/30">
+                            <!-- Simple logo dot -->
+                            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <circle cx="12" cy="12" r="8"></circle>
+                            </svg>
+                        </div>
+                        <h1 class="mt-4 text-2xl font-bold tracking-tight">Sign in!</h1>
+                        <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Join and ship faster. No spam, ever.
+                        </p>
+                    </header>
+
+                    <form id="registerForm" novalidate method="POST" class="space-y-3">
+                        {% csrf_token %}
+
+                        {{form}}
+
+                        <!-- Submit -->
+                        <button id="submitBtn" type="submit"
+                            class="inline-flex w-full items-center justify-center rounded-xl bg-indigo-500 px-4 py-2.5 text-white font-medium shadow-lg shadow-indigo-500/30 transition  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-950 mt-5">
+                            Sign In
+                        </button>
+
+                        <!-- Footnote -->
+                        <p class="mt-4 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                            Don't have an account?
+                            <a href="{% url 'register' %}"
+                                class="font-medium text-indigo-500 hover:underline">Create</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+</body>
+
+</html>

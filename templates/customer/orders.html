@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- In <head> -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap">
+</head>
+
+<body class="flex h-screen relative gap-10 bg-zinc-50">
+    <aside class="h-full inset-y-0 fixed w-[15%]">
+        {% include 'sidebar.html' %}
+    </aside>
+    <main class="p-8 flex-1 ml-[15%] pt-[4rem] ">
+        <h1 class="font-bold text-3xl">Orders</h1>
+        <p class="text-slate-600 mt-1">Track your purchases and payment status.</p>
+
+        <div class="border border-gray-200 rounded-xl mt-6 h-fit p-7 bg-white">
+            <section >
+                <div class="flex items-start justify-between gap-4">
+                    
+
+                    <div class="flex gap-2">
+                        <input type="search" placeholder="Search order ID..."
+                            class="w-64 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
+                        <select
+                            class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option>All statuses</option>
+                            <option>Paid</option>
+                            <option>Pending</option>
+                            <option>Cancelled</option>
+                            <option>Refunded</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-sm">
+                            <thead class="bg-slate-50 text-slate-600">
+                                <tr>
+                                    <th class="px-4 py-3 text-left font-medium">Order</th>
+                                    <th class="px-4 py-3 text-left font-medium">Date</th>
+                                    <th class="px-4 py-3 text-left font-medium">Status</th>
+                                    <th class="px-4 py-3 text-left font-medium">Items</th>
+                                    <th class="px-4 py-3 text-left font-medium">Payment</th>
+                                    <th class="px-4 py-3 text-right font-medium">Total</th>
+                                    <th class="px-4 py-3 text-right font-medium">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="divide-y divide-slate-100">
+                                <!-- Row -->
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-slate-900">#ORD-10923</td>
+                                    <td class="px-4 py-3 text-slate-700">Dec 06, 2025</td>
+
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                                            Paid
+                                        </span>
+                                    </td>
+
+                                    <td class="px-4 py-3 text-slate-700">3</td>
+                                    <td class="px-4 py-3 text-slate-700">Paystack</td>
+
+                                    <td class="px-4 py-3 text-right font-semibold text-slate-900">₦45,000</td>
+
+                                    <td class="px-4 py-3 text-right">
+                                        <a href="#" class="text-indigo-600 hover:text-indigo-700 font-medium">View</a>
+                                    </td>
+                                </tr>
+
+                                <!-- Row -->
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-slate-900">#ORD-10911</td>
+                                    <td class="px-4 py-3 text-slate-700">Dec 03, 2025</td>
+
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
+                                            Pending
+                                        </span>
+                                    </td>
+
+                                    <td class="px-4 py-3 text-slate-700">1</td>
+                                    <td class="px-4 py-3 text-slate-700">Bank Transfer</td>
+
+                                    <td class="px-4 py-3 text-right font-semibold text-slate-900">₦12,500</td>
+
+                                    <td class="px-4 py-3 text-right">
+                                        <a href="#" class="text-indigo-600 hover:text-indigo-700 font-medium">View</a>
+                                    </td>
+                                </tr>
+
+                                <!-- Empty state (show when no orders) -->
+                                <!--
+                  <tr>
+                    <td colspan="7" class="px-4 py-10 text-center">
+                      <p class="text-slate-700 font-medium">No orders yet</p>
+                      <p class="text-slate-500 mt-1">When you buy something, it will show up here.</p>
+                    </td>
+                  </tr>
+                  -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="flex items-center justify-between px-4 py-3 border-t border-slate-200">
+                        <p class="text-xs text-slate-500">Showing 1–10 of 42 orders</p>
+
+                        <div class="flex gap-2">
+                            <button
+                                class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-sm hover:bg-slate-50">Prev</button>
+                            <button
+                                class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-sm hover:bg-slate-50">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</body>
+
+</html>

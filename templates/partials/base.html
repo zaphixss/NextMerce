@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.1/flowbite.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class=" py-4 ">
+    <nav class="">
+        <div class="flex items-center justify-between border-b border-gray-200 pb-3 px-[19rem]">
+            <div class="flex items-center gap-10">
+                <a href="{% url 'index' %}">
+                    <img src="https://demo.nextmerce.com/images/logo/logo.svg" alt="">
+                </a>
+                <div class="flex items-center gap-3">
+                    <button id="dropdownDefaultButton" type="button" data-dropdown-toggle="dropdownMenu"
+                        class="inline-flex items-center justify-center rounded-full bg-[#F9FAFB] px-4 py-2.5 text-sm font-medium text-black shadow-sm  focus:outline-none border border-[#E5E7EB]">
+                        All Categories
+                        <svg class="ms-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 9-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown menu -->
+                    <div id="dropdownMenu"
+                        class="absolute right-0 z-20 mt-2 hidden w-44 rounded-lg border border-zinc-200 bg-white text-sm shadow-lg">
+                        <ul class="py-1 text-zinc-700" aria-labelledby="dropdownDefaultButton">
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-zinc-50 hover:text-zinc-900">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-zinc-50 hover:text-zinc-900">
+                                    Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-zinc-50 hover:text-zinc-900">
+                                    Earnings
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-zinc-50 hover:text-red-600">
+                                    Sign out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div
+                        class="flex items-center rounded-full bg-[#F9FAFB] px-4 py-1 w-[30rem] border border-[#E5E7EB]">
+                        <input type="text" placeholder="I am shopping for..."
+                            class="flex-1 bg-transparent text-sm text-zinc-800 placeholder:text-zinc-400 focus:outline-none border-none focus:ring-0" />
+
+                        <button type="submit"
+                            class="ml-2 inline-flex h-7 w-7 items-center justify-center rounded-full border border-zinc-300 text-zinc-500 hover:bg-zinc-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="7" />
+                                <line x1="16" y1="16" x2="20" y2="20" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6 text-sm">
+                <!-- Account -->
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-300">
+                        <i class="fa-regular fa-user text-lg text-zinc-700"></i>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                    <div>
+                        <p class="text-[11px] uppercase tracking-wide text-zinc-500">Account</p>
+                        <p class="font-medium capitalize">{{user.username}}</p>
+                    </div>
+
+                    {% else %}
+                    <div>
+                        <p class="text-[11px] uppercase tracking-wide text-zinc-500">Account</p>
+                        <a href="{% url 'login' %}" class="text-sm font-semibold text-blue-600 hover:underline">
+                            Sign In /
+                        </a>
+
+                        <a href="{% url 'register' %}" class="text-sm font-semibold text-blue-600 hover:underline">
+                            Register
+                        </a>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- Wishlist & Cart -->
+                <div class="flex items-center gap-3">
+                    <!-- Wishlist -->
+                    <a href="{% url 'wishlist' %}">
+                        <button class="relative text-xl text-zinc-700">
+                            <i class="fa-regular fa-heart"></i>
+                            <span
+                                class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-semibold text-white">
+                                {{wishlist.count}}
+                            </span>
+                        </button>
+                    </a>
+
+                    <!-- Cart -->
+                    <a href="{% url 'cart' %}">
+                        <button class="relative text-xl text-zinc-700">
+                            <i class="fa-solid fa-shopping-bag"></i>
+                            <span
+                                class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-semibold text-white">
+                                {{cart.count}}
+                            </span>
+                        </button>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between border-b border-gray-200 py-5 px-[19rem]">
+            <ul class="flex items-center gap-10 text-sm font-medium">
+                <li><a href="{% url 'best_selling' %}">Popular</a></li>
+                <li><a href="{% url 'shop' %}">Shop</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+
+            <a href="{% url 'best_selling' %}" class="flex items-center gap-2 font-medium text-sm">
+                Best Selling
+                <span class="bg-red-500 text-white text-[11px] font-medium rounded-full  px-2">SALE</span>
+            </a>
+        </div>
+    </nav>
+
+    {% block content %}
+
+    {% endblock content %}
+
+    <footer class="mt-16 border-t border-zinc-200 bg-white">
+        <div class="mx-auto flex flex-col gap-10 px-[15rem] py-10 lg:flex-row lg:justify-between lg:py-12">
+            <!-- Help & Support -->
+            <div class="space-y-4 lg:w-1/3">
+                <h3 class="text-lg font-semibold text-zinc-900">Help &amp; Support</h3>
+
+                <ul class="space-y-3 text-sm text-zinc-700">
+                    <li class="flex items-start gap-3">
+                        <span class="mt-0.5 text-indigo-600">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </span>
+                        <span>
+                            685 Market Street, Las Vegas, LA<br />
+                            95820, United States.
+                        </span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span class="text-indigo-600">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                        <span>(+099) 532-786-9843</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span class="text-indigo-600">
+                            <i class="fa-regular fa-envelope"></i>
+                        </span>
+                        <span>support@example.com</span>
+                    </li>
+                </ul>
+
+                <div class="flex items-center gap-4 text-lg text-zinc-800">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <!-- Account -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-zinc-900">Account</h3>
+                <ul class="space-y-2 text-sm text-zinc-700">
+                    <li><a href="#" class="hover:text-indigo-600">Login / Register</a></li>
+                    <li><a href="#" class="hover:text-indigo-600">Cart</a></li>
+                    <li><a href="#" class="hover:text-indigo-600">Wishlist</a></li>
+                    <li><a href="#" class="hover:text-indigo-600">Shop</a></li>
+                </ul>
+            </div>
+
+            <!-- Quick Link -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-zinc-900">Quick Link</h3>
+                <ul class="space-y-2 text-sm text-zinc-700">
+                    <li><a href="#" class="hover:text-indigo-600">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-indigo-600">Refund Policy</a></li>
+                    <li><a href="#" class="hover:text-indigo-600">Terms of Use</a></li>
+                    <li><a href="#" class="hover:text-indigo-600">FAQ's</a></li>
+                    <li><a href="#" class="hover:text-indigo-600">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Download App -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-zinc-900">Download App</h3>
+                <p class="text-sm text-zinc-700">Save $3 with App &amp; New User only</p>
+
+                <div class="space-y-3">
+                    <!-- App Store -->
+                    <a href="#"
+                        class="flex items-center gap-3 rounded-xl bg-zinc-900 px-4 py-3 text-left text-xs text-white">
+                        <i class="fa-brands fa-apple text-2xl"></i>
+                        <span class="leading-tight">
+                            <span class="block text-[11px] opacity-70">Download on the</span>
+                            <span class="text-sm font-semibold">App Store</span>
+                        </span>
+                    </a>
+
+                    <!-- Google Play -->
+                    <a href="#"
+                        class="flex items-center gap-3 rounded-xl bg-indigo-600 px-4 py-3 text-left text-xs text-white">
+                        <i class="fa-brands fa-google-play text-2xl"></i>
+                        <span class="leading-tight">
+                            <span class="block text-[11px] opacity-80">Get it on</span>
+                            <span class="text-sm font-semibold">Google Play</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom bar -->
+        <div class="border-t border-zinc-200">
+            <div
+                class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-4 text-xs text-zinc-600 sm:flex-row">
+                <p>
+                    &copy; 2025. All rights reserved by
+                    <span class="font-semibold text-indigo-600">Pimjo.</span>
+                </p>
+
+                <div class="flex items-center gap-3">
+                    <span class="text-[11px] uppercase tracking-wide text-zinc-500">
+                        We Accept:
+                    </span>
+                    <div class="flex items-center gap-2 text-lg text-zinc-700">
+                        <i class="fa-brands fa-cc-mastercard"></i>
+                        <i class="fa-brands fa-cc-visa"></i>
+                        <i class="fa-brands fa-cc-paypal"></i>
+                        <i class="fa-brands fa-cc-amex"></i>
+                        <span class="text-[11px] font-medium">Western Union</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".qty-picker").forEach((picker) => {
+                const stockRaw = parseInt(picker.dataset.stock || "1", 10);
+                const qtyRaw = parseInt(picker.dataset.qty || "1", 10);
+
+                const stock = Number.isFinite(stockRaw) ? Math.max(1, stockRaw) : 1;
+                let qty = Number.isFinite(qtyRaw) ? Math.max(1, qtyRaw) : 1;
+
+                // money-safe: work in cents
+                const unitStr = (picker.dataset.unitPrice || "0").replace(/,/g, "");
+                const unitCents = Math.round(parseFloat(unitStr) * 100) || 0;
+
+                const row = picker.closest(".grid"); // your row container
+                const subtotalEl = row.querySelector("[data-subtotal]");
+
+                const decBtn = picker.querySelector('[data-action="dec"]');
+                const incBtn = picker.querySelector('[data-action="inc"]');
+                const qtyEl = picker.querySelector("[data-qty-display]");
+                const qtyInput = picker.querySelector("[data-qty-input]");
+
+                function money(cents) {
+                    return `$${(cents / 100).toFixed(2)}`;
+                }
+
+                function render() {
+                    qty = Math.min(stock, Math.max(1, qty));
+
+                    qtyEl.textContent = qty;
+                    if (qtyInput) qtyInput.value = String(qty);
+
+                    decBtn.disabled = qty <= 1;
+                    incBtn.disabled = qty >= stock;
+
+                    // ✅ update subtotal UI
+                    const subtotalCents = unitCents * qty;
+                    if (subtotalEl) subtotalEl.textContent = money(subtotalCents);
+                }
+
+                decBtn.addEventListener("click", () => { qty -= 1; render(); });
+                incBtn.addEventListener("click", () => { qty += 1; render(); });
+
+                render();
+            });
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js"></script>
+</body>
+{% if messages %}
+<div class="fixed top-5 right-5 z-[9999] space-y-3">
+    {% for message in messages %}
+    <div class="rounded-xl px-4 py-3 shadow-lg
+                  {% if message.tags == 'success' %} bg-emerald-600 text-white {% endif %}
+                  {% if message.tags == 'error' %} bg-red-600 text-white {% endif %}
+                  {% if message.tags == 'warning' %} bg-amber-500 text-white {% endif %}
+                  {% if message.tags == 'info' %} bg-slate-900 text-white {% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+</html>

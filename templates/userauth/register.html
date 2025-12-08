@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <main class="py-[5rem] flex min-h-[60vh] items-center justify-center px-4 bg-zinc-50">
+        <!-- Scope the accent gradient ONLY to this wrapper -->
+        <div class="relative w-full max-w-md">
+            <div
+                class="pointer-events-none absolute inset-0 -z-10 rounded-[1.25rem] bg-gradient-to-br from-indigo-500/10 via-transparent to-indigo-500/10">
+            </div>
+
+            <!-- Card -->
+            <div
+                class="relative rounded-2xl border border-zinc-200/60 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+                <!-- Accent bar -->
+                <div class="h-1.5 w-full rounded-t-2xl bg-gradient-to-r from-indigo-500 via-indigo-500 to-indigo-500">
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <header>
+                        <div
+                            class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500 text-white shadow-lg shadow-indigo-500/30">
+                            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <circle cx="12" cy="12" r="8"></circle>
+                            </svg>
+                        </div>
+                        <h1 class="mt-4 text-2xl font-semibold tracking-tight text-zinc-900">
+                            Create your account
+                        </h1>
+                        <p class="mt-1 text-sm text-zinc-600">
+                            Join and ship faster. No spam, ever.
+                        </p>
+                    </header>
+
+                    <form id="registerForm" method="POST" class="mt-5 space-y-4">
+                        {% csrf_token %}
+
+                        <!-- Form fields -->
+                        <div class="space-y-3 text-sm">
+                            {{ form.non_field_errors }}
+
+                            {% for field in form %}
+                            <div class="space-y-1">
+                                <label for="{{ field.id_for_label }}"
+                                    class="block text-xs font-medium text-zinc-700 uppercase tracking-wide">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                                {% if field.errors %}
+                                <p class="mt-1 text-xs text-red-600">
+                                    {{ field.errors|striptags }}
+                                </p>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <button id="submitBtn" type="submit"
+                            class="inline-flex w-full items-center justify-center rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/30 transition hover:bg-indigo-600 hover:shadow-[0_12px_30px_rgba(79,70,229,.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50">
+                            Create account
+                        </button>
+
+                        <p class="pt-2 text-center text-sm text-zinc-600">
+                            Already have an account?
+                            <a href="{% url 'login' %}" class="font-medium text-indigo-500 hover:underline">
+                                Sign in
+                            </a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

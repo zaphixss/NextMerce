@@ -1,0 +1,116 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="border-b border-gray-200 py-[2rem] flex items-center justify-between px-[19rem]">
+    <h1 class="font-medium text-3xl">Wishlist</h1>
+    <div class="text-sm">
+        <a href="{% url 'index' %}" class="hover:text-blue-400">Home /</a>
+        <a href="{% url 'index' %}" class="text-[#2563eb]">Wishlist</a>
+    </div>
+</div>
+<section class="bg-[#F3F4F6] py-14 px-[19rem]">
+
+    <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-semibold text-slate-900">Your Wishlist</h2>
+        <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-700">
+            Clear Shopping Cart
+        </a>
+    </div>
+
+    <!-- Wishlist Table Card -->
+    <div class="mt-8 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+
+        <!-- Header -->
+        <div class="grid grid-cols-12 gap-4 border-b border-slate-200 px-6 py-5 text-sm font-semibold text-slate-900">
+            <div class="col-span-6">Product</div>
+            <div class="col-span-2">Unit Price</div>
+            <div class="col-span-2">Stock Status</div>
+            <div class="col-span-2 text-right">Action</div>
+        </div>
+
+        <!-- Rows -->
+        {% for w in wishlist %}
+        <div class="grid grid-cols-12 items-center gap-47 px-6 py-6">
+
+            <!-- Product -->
+            <div class="col-span-6 flex items-center gap-5 min-w-0">
+
+                <!-- Remove icon -->
+                <a href="{% url 'wishlist_delete' w.id%}"
+                    class="grid h-8 w-8 place-items-center rounded-full border border-slate-300 text-slate-700 hover:bg-slate-100 shrink-0">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </a>
+
+                <!-- Image -->
+                <div class="h-16 w-16 overflow-hidden rounded-xl bg-slate-100 ring-1 ring-slate-200 shrink-0">
+                    <img src="{{ w.product.image.url }}" alt="{{ w.product.name }}"
+                        class="h-full w-full object-cover" />
+                </div>
+
+                <!-- Name -->
+                <div class="min-w-0">
+                    <p class="truncate text-[15px] font-semibold text-slate-900">
+                        {{ w.product.name }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Unit Price -->
+            <div class="col-span-2 font-semibold text-slate-900">
+                ${{ w.product.sale_price }}
+            </div>
+
+            <!-- Stock Status -->
+            
+            {% if w.product.in_stock %}
+                <div class="col-span-2 flex items-center gap-1">
+                    <span class="text-emerald-600">
+                        <i class="fa-solid fa-check-circle"></i>
+                    </span>
+                    <span class="text-sm font-medium text-emerald-600">
+                        In Stock
+                    </span>
+                </div>
+                {% else %}
+                <div class="col-span-2 flex items-center gap-1">
+                    <span class="text-red-600">
+                        <i class="fa-solid fa-check-circle"></i>
+                    </span>
+                    <span class="text-sm font-medium text-red-600">
+                    Out of Stock
+                    </span>
+                </div>
+            {% endif %}
+                
+
+            <!-- Action -->
+            <div class="col-span-2 flex justify-end">
+                <form method="POST" action="{% url 'add_cart' w.id%}">
+                    {% csrf_token %}
+                    <button
+                        class="rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-700">
+                        Add to Cart
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if not forloop.last %}
+        <div class="mx-6 h-px bg-slate-200"></div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+
+  
+
+
+</section>
+
+
+
+
+
+{% endblock content %}
