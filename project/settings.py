@@ -33,7 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["nextmerce.up.railway.app","127.0.0.1"]
 
-CSRf_TRUSTED_ORIGINS = ['https://nextmerce.up.railway.app', 'http://127.0.0.1',]
+CSRF_TRUSTED_ORIGINS = ['https://nextmerce.up.railway.app', 'http://127.0.0.1',]
 # Application definition
 
 INSTALLED_APPS = [
