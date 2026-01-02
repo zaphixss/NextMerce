@@ -1,116 +1,114 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 
-
 {% block content %}
-<div class="border-b border-gray-200 py-[2rem] flex items-center justify-between px-[19rem]">
+
+<div
+    class="bg-white border-b border-gray-200 py-8 flex items-center justify-between px-4 md:px-8 lg:px-12 2xl:px-[19rem]">
     <h1 class="font-medium text-3xl">Wishlist</h1>
     <div class="text-sm">
         <a href="{% url 'index' %}" class="hover:text-blue-400">Home /</a>
         <a href="{% url 'index' %}" class="text-[#2563eb]">Wishlist</a>
     </div>
 </div>
-<section class="bg-[#F3F4F6] py-14 px-[19rem]">
+
+<section class="bg-[#F3F4F6] py-14 px-4 md:px-8 lg:px-12 2xl:px-[19rem]">
 
     <div class="flex items-center justify-between">
         <h2 class="text-2xl font-semibold text-slate-900">Your Wishlist</h2>
+
+        {% if wishlist %}
         <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-700">
-            Clear Shopping Cart
+            Clear Wishlist
         </a>
+        {% endif %}
     </div>
 
-    <!-- Wishlist Table Card -->
+    {% if wishlist %}
+
     <div class="mt-8 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
 
-        <!-- Header -->
-        <div class="grid grid-cols-12 gap-4 border-b border-slate-200 px-6 py-5 text-sm font-semibold text-slate-900">
+        <div
+            class="hidden md:grid grid-cols-12 gap-4 border-b border-slate-200 px-6 py-5 text-sm font-semibold text-slate-900">
             <div class="col-span-6">Product</div>
             <div class="col-span-2">Unit Price</div>
             <div class="col-span-2">Stock Status</div>
             <div class="col-span-2 text-right">Action</div>
         </div>
 
-        <!-- Rows -->
-        {% for w in wishlist %}
-        <div class="grid grid-cols-12 items-center gap-47 px-6 py-6">
-
-            <!-- Product -->
-            <div class="col-span-6 flex items-center gap-5 min-w-0">
-
-                <!-- Remove icon -->
-                <a href="{% url 'wishlist_delete' w.id%}"
-                    class="grid h-8 w-8 place-items-center rounded-full border border-slate-300 text-slate-700 hover:bg-slate-100 shrink-0">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </a>
-
-                <!-- Image -->
-                <div class="h-16 w-16 overflow-hidden rounded-xl bg-slate-100 ring-1 ring-slate-200 shrink-0">
-                    <img src="{{ w.product.image.url }}" alt="{{ w.product.name }}"
-                        class="h-full w-full object-cover" />
-                </div>
-
-                <!-- Name -->
-                <div class="min-w-0">
-                    <p class="truncate text-[15px] font-semibold text-slate-900">
-                        {{ w.product.name }}
-                    </p>
-                </div>
+    {% for w in wishlist %}
+    <div
+        class="relative flex flex-col gap-4 p-6 border-b border-slate-100 last:border-0 md:grid md:grid-cols-12 md:items-center md:gap-4 md:border-none">
+    
+        <div class="col-span-6 flex items-center gap-5 min-w-0">
+    
+            <a href="{% url 'wishlist_delete' w.id%}"
+                class="absolute top-4 right-4 md:static grid h-8 w-8 place-items-center rounded-full border border-slate-300 text-slate-700 hover:bg-slate-100 shrink-0">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </a>
+    
+            <div class="h-16 w-16 overflow-hidden rounded-xl bg-slate-100 ring-1 ring-slate-200 shrink-0">
+                <img src="{{ w.product.image.url }}" alt="{{ w.product.name }}" class="h-full w-full object-cover" />
             </div>
-
-            <!-- Unit Price -->
-            <div class="col-span-2 font-semibold text-slate-900">
-                ${{ w.product.sale_price }}
-            </div>
-
-            <!-- Stock Status -->
-            
-            {% if w.product.in_stock %}
-                <div class="col-span-2 flex items-center gap-1">
-                    <span class="text-emerald-600">
-                        <i class="fa-solid fa-check-circle"></i>
-                    </span>
-                    <span class="text-sm font-medium text-emerald-600">
-                        In Stock
-                    </span>
-                </div>
-                {% else %}
-                <div class="col-span-2 flex items-center gap-1">
-                    <span class="text-red-600">
-                        <i class="fa-solid fa-check-circle"></i>
-                    </span>
-                    <span class="text-sm font-medium text-red-600">
-                    Out of Stock
-                    </span>
-                </div>
-            {% endif %}
-                
-
-            <!-- Action -->
-            <div class="col-span-2 flex justify-end">
-                <form method="POST" action="{% url 'add_cart' w.id%}">
-                    {% csrf_token %}
-                    <button
-                        class="rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-700">
-                        Add to Cart
-                    </button>
-                </form>
+    
+            <div class="min-w-0 pr-8 md:pr-0">
+                <p class="truncate text-[15px] font-semibold text-slate-900">
+                    {{ w.product.name }}
+                </p>
+                <p class="block md:hidden text-sm font-semibold text-slate-600 mt-1">
+                    ${{ w.product.sale_price }}
+                </p>
             </div>
         </div>
-
-        {% if not forloop.last %}
-        <div class="mx-6 h-px bg-slate-200"></div>
-        {% endif %}
-        {% endfor %}
+    
+        <div class="hidden md:block col-span-2 font-semibold text-slate-900">
+            ${{ w.product.sale_price }}
+        </div>
+    
+        <div class="col-span-2 flex items-center gap-1 mt-1 md:mt-0">
+            {% if w.product.in_stock %}
+            <span class="text-emerald-600"><i class="fa-solid fa-check-circle"></i></span>
+            <span class="text-sm font-medium text-emerald-600">In Stock</span>
+            {% else %}
+            <span class="text-red-600"><i class="fa-solid fa-check-circle"></i></span>
+            <span class="text-sm font-medium text-red-600">Out of Stock</span>
+            {% endif %}
+        </div>
+    
+        <div class="col-span-2 flex justify-start md:justify-end mt-2 md:mt-0">
+            <form method="POST" action="{% url 'add_cart' w.id%}">
+                {% csrf_token %}
+                <button
+                    class="rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-bold text-white hover:bg-indigo-700 transition-colors shadow-sm">
+                    Add to Cart
+                </button>
+            </form>
+        </div>
+    
+    </div>
+    
+    {% if not forloop.last %}
+    <div class="hidden md:block mx-6 h-px bg-slate-200"></div>
+    {% endif %}
+    
+    {% endfor %}
     </div>
 
+    {% else %}
 
-  
+    <div class="mt-8 rounded-2xl bg-white p-10 text-center shadow-sm ring-1 ring-slate-200">
+        <div class="flex flex-col items-center justify-center gap-2">
+            <i class="fa-regular fa-heart text-4xl text-slate-300"></i>
+            <h3 class="mt-2 text-lg font-semibold text-slate-900">Your wishlist is empty</h3>
+            <p class="text-slate-500">Looks like you haven't added any items to your wishlist yet.</p>
+            <a href="{% url 'index' %}"
+                class="mt-4 rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-indigo-700">
+                Start Shopping
+            </a>
+        </div>
+    </div>
 
+    {% endif %}
 
 </section>
-
-
-
-
-
 {% endblock content %}

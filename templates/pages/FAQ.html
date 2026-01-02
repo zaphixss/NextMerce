@@ -1,0 +1,59 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="px-4 md:px-8 lg:px-12 2xl:px-[19rem] py-16">
+
+    <div class="text-center max-w-2xl mx-auto mb-16">
+        <h1 class="text-3xl font-bold text-slate-900">Frequently Asked Questions</h1>
+        <p class="text-slate-600 mt-2">Find answers to common questions about our products and services.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+
+        <div>
+            <h3 class="font-bold text-lg text-slate-900 mb-2">How long does shipping take?</h3>
+            <p class="text-slate-600 leading-relaxed text-sm">
+                Standard shipping typically takes 3-5 business days. International shipping may take 7-14 business days
+                depending on the destination.
+            </p>
+        </div>
+
+        <div>
+            <h3 class="font-bold text-lg text-slate-900 mb-2">What is your return policy?</h3>
+            <p class="text-slate-600 leading-relaxed text-sm">
+                We offer a 30-day return policy for all unused items in their original packaging. Please visit our
+                Returns page to initiate a return.
+            </p>
+        </div>
+
+        <div>
+            <h3 class="font-bold text-lg text-slate-900 mb-2">Do you ship internationally?</h3>
+            <p class="text-slate-600 leading-relaxed text-sm">
+                Yes, we ship to over 50 countries worldwide. Shipping costs will be calculated at checkout based on your
+                location.
+            </p>
+        </div>
+
+        <div>
+            <h3 class="font-bold text-lg text-slate-900 mb-2">How can I track my order?</h3>
+            <p class="text-slate-600 leading-relaxed text-sm">
+                Once your order ships, you will receive a tracking number via email. You can also track it directly from
+                your Account Dashboard.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="mt-16 text-center bg-slate-50 rounded-2xl p-8">
+        <p class="font-medium text-slate-900">Still have questions?</p>
+        <p class="text-slate-500 text-sm mb-4">Can't find the answer you're looking for? Please chat to our friendly
+            team.</p>
+        <a href="{% url 'contact' %}"
+            class="inline-block bg-indigo-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-indigo-700 transition-colors">
+            Contact Support
+        </a>
+    </div>
+
+</section>
+{% endblock content %}

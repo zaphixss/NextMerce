@@ -1,0 +1,349 @@
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from store.models import OrderItem, Order, Product, Reviews, Category
+from django.db.models import Avg, Sum, Q, Count
+from django.db.models.functions import TruncMonth
+import json
+from django.contrib import messages
+from django.utils.text import slugify
+
+@login_required
+def vendor_dashboard(request):
+    user = request.user
+    
+    orders_count = OrderItem.objects.filter(product__user=user, order__payment_status='Paid')
+    active_products = Product.objects.filter(status='Published', user=user)
+    
+    rating_data = Reviews.objects.filter(product__user=user).aggregate(Avg('rating'))
+    avg_rating = rating_data['rating__avg']
+    avg_rating = round(avg_rating, 1) if avg_rating else 0
+
+    revenue_data = OrderItem.objects.filter(order__payment_status='Paid', product__user=user).aggregate(Sum("sub_total"))    
+    revenue = revenue_data['sub_total__sum'] or 0 # Handle None if no sales
+    
+    orders = (
+        Order.objects
+        .filter(orderitem__product__user=user)
+        .annotate(
+            vendor_total=Sum(
+                "orderitem__sub_total", 
+                filter=Q(orderitem__product__user=user)
+            )
+        )
+        .order_by('-date') 
+    )
+
+
+    # --- NEW: CHART DATA CALCULATIONS ---
+
+    # 1. REVENUE CHART (Area Chart)
+    # Group OrderItems by Month and Sum the sub_total
+    monthly_revenue = (
+        OrderItem.objects
+        .filter(product__user=user, order__payment_status='Paid')
+        .annotate(month=TruncMonth('order__date')) # Make sure 'date' is the correct field name on OrderItem (or order__date)
+        .values('month')
+        .annotate(total_revenue=Sum('sub_total'))
+        .order_by('month')
+    )
+
+    # Prepare lists for ApexCharts
+    revenue_dates = []
+    revenue_amounts = []
+
+    for item in monthly_revenue:
+        # Convert date to string (e.g., "Jan")
+        revenue_dates.append(item['month'].strftime('%b')) 
+        # Convert Decimal to float for JSON
+        revenue_amounts.append(float(item['total_revenue']))
+
+
+    # 2. CATEGORY CHART (Donut Chart)
+    # Group OrderItems by Product Category and Sum sub_total (or Count)
+    # NOTE: Adjust 'product__category__title' to match your actual Category model field name (e.g. name, title)
+    category_sales = (
+        OrderItem.objects
+        .filter(product__user=user, order__payment_status='Paid')
+        .values('product__category__title') 
+        .annotate(total_sales=Sum('sub_total'))
+        .order_by('-total_sales') # Sort biggest first
+    )
+
+    category_labels = []
+    category_data = []
+
+    for item in category_sales:
+        category_labels.append(item['product__category__title'])
+        category_data.append(float(item['total_sales']))
+
+
+    context = {
+        'orders_count': orders_count,
+        'active_products': active_products,
+        'avg_rating': avg_rating,
+        'revenue': revenue,
+        'orders': orders,
+        
+        # Pass JSON strings to template
+        'revenue_dates': json.dumps(revenue_dates),
+        'revenue_amounts': json.dumps(revenue_amounts),
+        'category_labels': json.dumps(category_labels),
+        'category_data': json.dumps(category_data),
+    }
+    return render(request, 'vendor/dashboard.html', context)
+
+
+
+@login_required
+def vendor_product_list(request):
+    products = Product.objects.filter(user=request.user)
+    
+    published_products = products.filter(status="Published")
+    draft_products = products.filter(status="Draft")
+    disabled_products = products.filter(status="Disabled")
+    average_price = products.aggregate(avg_price=Avg('sale_price'))['avg_price'] or 0
+    context = {
+        'products': products, # kept for total counts
+        'published_products': published_products,
+        'draft_products': draft_products,
+        'disabled_products': disabled_products,
+        'average_price': average_price,
+    }
+    return render(request, 'vendor/product_list.html', context)
+
+@login_required
+def vendor_create_product(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        regular_price = request.POST.get('regular_price') 
+        sale_price = request.POST.get('sale_price') 
+        qty = request.POST.get('qty') 
+        status = request.POST.get('status') 
+        category_id = request.POST.get('category')
+        in_stock = 'in_stock' in request.POST
+        featured = 'featured' in request.POST
+        free_delivery = 'free_delivery' in request.POST
+        image = request.FILES.get('image')
+        cover_image = request.FILES.get('cover_image')
+        category = Category.objects.get(id=category_id) if category_id else None
+
+        new_product = Product.objects.create(
+            user=request.user,                
+            category=category,                
+            name=name,
+            slug=slugify(name),               
+            description=description,
+            regular_price=regular_price,
+            sale_price=sale_price,
+            qty=qty,
+            status=status,
+            in_stock=in_stock,
+            featured=featured,
+            free_delivery=free_delivery,
+            image=image,                      
+            cover_image=cover_image                       
+        )
+
+      
+        messages.success(request, f"Product '{name}' created successfully!")
+        
+        return redirect('vendor_product_list')
+
+    categories = Category.objects.all()
+
+    context = {
+        "categories": categories
+    }
+    
+    return render(request, "vendor/add_product.html", context)
+
+
+@login_required
+def vendor_edit_product(request, id):
+    product = Product.objects.get(id=id, user=request.user)
+    categories = Category.objects.all() 
+    if request.method == "POST":
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        regular_price = request.POST.get('regular_price') 
+        sale_price = request.POST.get('sale_price') 
+        qty = request.POST.get('qty') 
+        status = request.POST.get('status') 
+        category_id = request.POST.get('category')
+        
+        in_stock = 'in_stock' in request.POST
+        featured = 'featured' in request.POST
+        free_delivery = 'free_delivery' in request.POST
+        
+        image = request.FILES.get('image')
+        if image:
+            product.image = image
+
+        cover_image = request.FILES.get("cover_image")
+        if cover_image:
+            product.cover_image = cover_image
+
+        # Update the object
+        product.name = name
+        product.slug = slugify(name)
+        product.description = description
+        product.regular_price = regular_price
+        product.sale_price = sale_price
+        product.qty = qty
+        product.status = status
+        product.in_stock = in_stock
+        product.featured = featured
+        product.free_delivery = free_delivery
+        
+        # Update Category if provided
+        if category_id:
+            product.category = Category.objects.get(id=category_id)
+
+        product.save()
+        messages.success(request, f"Updated {product.name} successfully!")
+        return redirect("vendor_product_list")
+    context = {
+        "product": product,
+        "categories": categories,
+    }
+    return render(request, "vendor/edit_product.html", context)
+
+def product_delete(request, id):
+    product = Product.objects.get(id=id, user=request.user)
+    product.delete()
+    messages.success(request, f"Deleted {product.name} successfully!")
+    return redirect("vendor_product_list")
+
+@login_required
+def vendor_orders(request):
+    # Fetch orders containing items belonging to this vendor, ordered by newest first
+    orders = (
+        Order.objects
+        .filter(orderitem__product__user=request.user)
+        .annotate(
+            vendor_total=Sum(
+                "orderitem__sub_total", 
+                filter=Q(orderitem__product__user=request.user)
+            )
+        )
+        .order_by('-date') 
+    )
+    
+    # Categorize for the dashboard tabs
+    pending_orders = orders.filter(payment_status="pending")
+    paid_orders = orders.filter(payment_status="paid")
+    cancelled_orders = orders.filter(payment_status="cancelled")
+
+    context = {
+        'orders': orders,
+        'pending_orders': pending_orders,
+        'paid_orders': paid_orders,
+        'cancelled_orders': cancelled_orders,
+    }
+    return render(request, 'vendor/orders.html', context)
+
+
+@login_required
+def vendor_order_detail(request, id):
+    order = Order.objects.get(id=id)
+    order_items = OrderItem.objects.filter(order=order, product__user=request.user)
+    
+    # You must define the variable here before using it below
+    vendor_order_total = order_items.aggregate(total=Sum('sub_total'))['total'] or 0
+
+    context = {
+        'order': order,
+        'order_items': order_items,
+        'vendor_total': vendor_order_total, # Make sure the name matches your calculation
+    }
+    return render(request, 'vendor/order_detail.html', context)
+
+@login_required
+def vendor_customers(request):
+    # Add a filter to ensure only completed, named orders are shown
+    vendor_items = OrderItem.objects.filter(
+        product__user=request.user, 
+        order__fullname__isnull=False
+    ).exclude(order__fullname="")
+    
+    customers = vendor_items.values(
+        'order__id',  
+        'order__user__id', 
+        'order__fullname', 
+        'order__mobile'
+    ).annotate(
+        total_items=Sum('qty'),
+        order_count=Count('order', distinct=True)
+    ).order_by('-total_items')
+
+    context = {'customers': customers}
+    return render(request, 'vendor/customers.html', context)
+
+@login_required
+def vendor_reviews(request):
+    # Fetch all reviews for this vendor's products
+    reviews = Reviews.objects.filter(
+        product__user=request.user, 
+        reply=False
+    ).order_by("-date") 
+    
+    # Calculate Average Rating
+    average_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+    
+    if request.method == "POST":
+        review_id = request.POST.get("review_id")
+        reply_text = request.POST.get("reply")
+        
+        review = Reviews.objects.get( id=review_id, product__user=request.user)
+        review.reply = reply_text
+        review.reply = True
+        review.save()
+        
+        messages.success(request, "Reply sent successfully!")
+        return redirect("vendor_reviews")
+
+    context = {
+        'reviews': reviews,
+        'average_rating': round(average_rating, 1),
+    }
+    return render(request, 'vendor/reviews.html', context)
+
+@login_required
+def vendor_profile(request):
+    user = request.user  # your custom user model instance
+
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip()
+        firstname = request.POST.get("firstname", "").strip()
+        lastname = request.POST.get("lastname", "").strip()
+        country = request.POST.get("country", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        image = request.FILES.get("image")
+
+        # ✅ Basic validation (email required)
+        if not email:
+            messages.error(request, "Email is required.")
+            return redirect("profile_update")
+
+        # ✅ Uniqueness checks (avoid crashing on unique constraint)
+        if email != user.email and user.__class__.objects.filter(email=email).exists():
+            messages.error(request, "That email is already in use.")
+            return redirect("profile_update")
+
+
+        # ✅ Update fields
+        user.email = email
+        user.firstname = firstname or None
+        user.lastname = lastname or None
+        user.country = country or None
+        user.phone = phone or None
+
+        # ✅ Update image only if user picked one
+        if image:
+            user.image = image
+
+        user.save()
+        messages.success(request, "Profile updated successfully!")
+        return redirect("vendor_profile")
+    return render(request, 'vendor/profile.html')

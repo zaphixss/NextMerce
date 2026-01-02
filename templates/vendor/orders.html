@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders | NextMerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    screens: {
+                        '2xl': '1536px',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-padding {
+                padding: 1.25rem !important;
+            }
+
+            .mobile-header-stack {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+
+            .mobile-full-width {
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#F8F9FC] h-screen flex overflow-hidden font-['Plus_Jakarta_Sans']">
+
+    <aside class="w-64 bg-white border-r border-slate-200 hidden lg:block flex-shrink-0 z-20">
+        {% include 'vendor/includes/vendor.sidebar.html' %}
+    </aside>
+
+    <div id="drawer-navigation"
+        class="fixed top-0 left-0 z-40 h-screen p-2  transition-transform -translate-x-full bg-white w-fit " tabindex="-1"
+        aria-labelledby="drawer-navigation-label">
+        <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div>
+            {% include 'vendor/includes/vendor.sidebar.html' %}
+        </div>
+    </div>
+
+    <main class="flex-1 px-4 lg:px-[4%] 2xl:px-[8%] p-8 overflow-y-auto h-full mobile-padding">
+
+        <header class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4 mobile-header-stack">
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <div>
+                    <h1 class="text-3xl font-black text-slate-900 tracking-tight">Order Management</h1>
+                    <p class="text-slate-500 text-sm mt-1">Track payments and manage fulfillment.</p>
+                </div>
+                <button class="lg:hidden p-2.5 text-slate-600 bg-white border border-slate-200 rounded-xl shadow-sm"
+                    type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation">
+                    <i class="fa-solid fa-bars-staggered text-xl"></i>
+                </button>
+            </div>
+
+            <div class="flex gap-3 max-[768px]:w-full">
+                <button
+                    class="flex-1 md:flex-none flex items-center justify-center bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                    <i class="fa-solid fa-download mr-2"></i> Export CSV
+                </button>
+            </div>
+        </header>
+
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden mb-12">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left min-w-[800px]">
+                    <thead class="bg-slate-50 border-b border-slate-100">
+                        <tr>
+                            <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Order
+                                ID</th>
+                            <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                Customer</th>
+                            <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Total
+                                Amount</th>
+                            <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                Payment</th>
+                            <th
+                                class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">
+                                Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        {% for o in orders %}
+                        <tr class="hover:bg-slate-50/50 transition-all group">
+                            <td class="px-8 py-5">
+                                <span class="text-sm font-black text-slate-900">#{{ o.id }}</span>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">{{ o.date|date:"d M, Y"}}</p>
+                                    
+                            </td>
+                            <td class="px-8 py-5">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-900">{{ o.fullname }}</span>
+                                    <span class="text-xs text-slate-400">{{ o.mobile }}</span>
+                                </div>
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="text-sm font-black text-slate-900">${{ o.total }}</span>
+                            </td>
+                            <td class="px-8 py-5">
+                                <span
+                                    class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider 
+                                    {% if o.payment_status == 'Paid' %} bg-emerald-50 text-emerald-600 {% else %} bg-amber-50 text-amber-600 {% endif %}">
+                                    {{ o.payment_status }}
+                                </span>
+                            </td>
+                            <td class="px-8 py-5 text-right">
+                                <a href="{% url 'order_detail' o.id %}"
+                                    class="text-indigo-600 hover:text-indigo-900 text-[10px] font-black uppercase tracking-widest transition-colors">Details</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-8 py-12">
+                                {% include 'vendor/includes/empty_state.html' with message="No orders have been placed yet." %}
+                                
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+</body>
+
+</html>

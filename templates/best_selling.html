@@ -1,97 +1,113 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 
-
 {% block content %}
-<div class="border-b border-gray-200 py-[2rem] flex items-center justify-between px-[19rem]">
-    <h1 class="font-medium text-3xl">Our Best Products</h1>
-    <div class="text-sm">
-        <a href="{% url 'index' %}" class="hover:text-blue-400">Home /</a>
-        <a href="{% url 'index' %}" class="text-[#2563eb]">Popular</a>
+<div
+    class="bg-white border-b border-gray-200 py-8 flex lg:flex-row flex-col lg:gap-0 gap-2 items-center justify-between px-4 md:px-8 lg:px-12 2xl:px-[19rem]">
+    <h1 class="font-medium text-3xl text-slate-900">Our Best Products</h1>
+    <div class="text-sm font-medium">
+        <a href="{% url 'index' %}" class="text-slate-500 hover:text-blue-600 transition-colors">Home /</a>
+        <span class="text-blue-600">Popular</span>
     </div>
 </div>
-<section class="bg-[#F3F4F6] py-14 px-[19rem]">
-    <div class="mt-6 flex items-center justify-between rounded-2xl bg-white px-6 py-4">
 
-        <!-- Left controls -->
-        <div class="flex items-center gap-6">
+<section class="bg-[#F3F4F6] py-14 px-4 md:px-8 lg:px-12 2xl:px-[19rem]">
 
-            <!-- Sort dropdown button -->
-            <button
-                class="flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">
+    <div
+        class="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-white px-6 py-4 shadow-sm border border-slate-100 mb-8">
+        <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
+            <span
+                class="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-700">
                 Best Selling
-            </button>
-
-            <!-- Showing text -->
-            <p class="text-sm font-medium text-slate-900">
-                Showing {{best_selling.count}} of {{best_selling.count}} Products
+            </span>
+            <p class="text-sm font-medium text-slate-500">
+                Showing <span class="text-slate-900 font-bold">{{ products.count }}</span> Products
             </p>
         </div>
 
-
-        <!-- Grid button (active) -->
-        <button class="rounded-xl bg-indigo-600 px-3 py-2 text-white hover:bg-indigo-700 transition">
-            <i class="fa-solid fa-list"></i>
+        <button
+            class="hidden sm:inline-flex rounded-lg bg-indigo-600 p-2 text-white hover:bg-indigo-700 transition shadow-sm">
+            <i class="fa-solid fa-list text-sm"></i>
         </button>
     </div>
 
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for p in product %}
+        <div
+            class="group relative bg-white rounded-2xl border border-slate-100 p-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
 
-    <div class="grid grid-cols-4 gap-6">
-        {% for p in products %}
-        <div>
-            <!-- Card -->
-            <div class="rounded-2xl bg-white p-4 shadow-sm cursor-pointer mt-[2rem]"
+            <div class="relative w-full h-48 bg-[#f5f7fb] rounded-xl overflow-hidden mb-4 p-4 flex items-center justify-center cursor-pointer"
                 onclick='window.location.href="{% url "product_detail" p.slug %}"'>
-                <!-- Product image -->
-                <div class="flex items-center justify-center h-48">
-                    <img src="{{ p.image.url }}" alt="{{ b.name }}" class="max-h-full object-contain" />
-                </div>
+                <img src="{{ p.image.url }}" alt="{{ p.name }}"
+                    class="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500" />
 
-                <!-- Actions -->
-                <div class="mt-4 flex items-center justify-center  gap-[1rem]">
-
+                <div
+                    class="absolute bottom-3 flex gap-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                     <a href="{% url 'add_cart' p.id %}">
                         <button
-                            class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50">
-                            <i class="fa-solid fa-cart-shopping  text-sm"></i>
-
+                            class="h-9 w-9 rounded-full bg-white text-slate-900 shadow-md flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-colors">
+                            <i class="fa-solid fa-cart-plus text-sm"></i>
                         </button>
                     </a>
-
-                    <a href="{% url 'add_wishlist' p.id%}">
+                    <a href="{% url 'add_wishlist' p.id %}">
                         <button
-                            class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50">
+                            class="h-9 w-9 rounded-full bg-white text-slate-900 shadow-md flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors">
                             <i class="fa-regular fa-heart text-sm"></i>
                         </button>
                     </a>
                 </div>
-
             </div>
-            <!-- Title -->
-            <h3 class="mt-3 text-sm font-semibold text-slate-900">
-                {{ p.name }}
-            </h3>
 
-            <!-- Prices -->
-            <div class="mt-1 flex items-center gap-2 text-sm">
-                <span class="font-bold text-slate-900">${{ p.sale_price }}</span>
-                {% if p.regular_price %}
-                <span class="text-slate-400 line-through">${{ p.regular_price}}</span>
-                {% endif %}
+            <div>
+                <h3 class="font-bold text-sm text-slate-900 line-clamp-1 mb-1">
+                    <a href="{% url 'product_detail' p.slug %}" class="hover:text-indigo-600 transition-colors">{{
+                        p.name }}</a>
+                </h3>
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-indigo-600 text-sm">${{ p.sale_price }}</span>
+                    {% if p.regular_price %}
+                    <span class="text-xs text-slate-400 line-through">${{ p.regular_price}}</span>
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% endfor %}
-
     </div>
 
+    <div class="mt-12 flex justify-center">
+        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm bg-white" aria-label="Pagination">
 
+            {% if products.has_previous %}
+            <a href="?{{ request.GET.urlencode }}&page={{ products.previous_page_number }}"
+                class="relative inline-flex items-center rounded-l-md px-3 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 hover:text-indigo-600 focus:z-20 focus:outline-offset-0">
+                <span class="sr-only">Previous</span>
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                        clip-rule="evenodd" />
+                </svg>
+            </a>
+            {% endif %}
 
+            <span
+                class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-indigo-600 ring-1 ring-inset ring-gray-300 focus:outline-offset-0 bg-indigo-50">
+                Page {{ products.number }} of {{ products.paginator.num_pages }}
+            </span>
 
+            {% if products.has_next %}
+            <a href="?{{ request.GET.urlencode }}&page={{ products.next_page_number }}"
+                class="relative inline-flex items-center rounded-r-md px-3 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 hover:text-indigo-600 focus:z-20 focus:outline-offset-0">
+                <span class="sr-only">Next</span>
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                        clip-rule="evenodd" />
+                </svg>
+            </a>
+            {% endif %}
+
+        </nav>
+    </div>
 
 </section>
-
-
-
-
-
 {% endblock content %}

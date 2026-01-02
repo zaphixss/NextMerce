@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        primary: '#4F46E5',
+                        primary_hover: '#4338ca',
+                    },
+                    screens: {
+                        '2xl': '1536px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-container {
+                padding-left: 1.25rem !important;
+                padding-right: 1.25rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#F8F9FC] h-screen flex overflow-hidden font-['Plus_Jakarta_Sans']">
+
+    <aside class="w-64 bg-white border-r border-slate-200 hidden lg:block flex-shrink-0 z-20">
+        {% include 'vendor/includes/vendor.sidebar.html' %}
+    </aside>
+
+     <div id="drawer-navigation"
+        class="fixed top-0 left-0 z-40 h-screen p-2  transition-transform -translate-x-full bg-white w-fit "
+        tabindex="-1" aria-labelledby="drawer-navigation-label">
+        <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div >
+            {% include 'vendor/includes/vendor.sidebar.html' %}
+        </div>
+    </div>
+
+    <main class="flex-1 px-4 lg:px-[5%] 2xl:px-[12%] p-8 overflow-y-auto h-full mobile-container">
+
+        <header class="flex flex-col min-[769px]:flex-row min-[769px]:items-center justify-between mb-8 gap-4">
+            <div class="flex items-center justify-between w-full min-[769px]:w-auto">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Products</h1>
+                    <p class="text-slate-500 text-sm mt-1">Manage your catalog and inventory.</p>
+                </div>
+                <button class="lg:hidden p-2 text-slate-600 bg-white border border-slate-200 rounded-lg shadow-sm"
+                    type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation"
+                    aria-controls="drawer-navigation">
+                    <i class="fa-solid fa-bars-staggered text-xl"></i>
+                </button>
+            </div>
+
+            <div class="flex gap-3 max-[768px]:w-full">
+                <a href="{% url 'vendor_create_product' %}"
+                    class="flex-1 min-[769px]:flex-none flex items-center justify-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-800 transition shadow-lg shadow-slate-200">
+                    <i class="fa-solid fa-plus"></i> Add Product
+                </a>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Products</p>
+                    <h3 class="text-2xl font-bold text-slate-900 mt-1">{{ products.count }}</h3>
+                </div>
+                <div class="h-10 w-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600">
+                    <i class="fa-solid fa-box"></i>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Published</p>
+                    <h3 class="text-2xl font-bold text-slate-900 mt-1">{{ published_products.count }}</h3>
+                </div>
+                <div class="h-10 w-10 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Avg. Price</p>
+                    <h3 class="text-2xl font-bold text-slate-900 mt-1">${{ average_price|floatformat:2 }}</h3>
+                </div>
+                <div class="h-10 w-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-6 border-b border-slate-200 overflow-x-auto no-scrollbar">
+            <ul class="flex min-w-max -mb-px text-sm font-medium text-center" id="product-tabs"
+                data-tabs-toggle="#product-tab-content" role="tablist">
+                <li class="me-6" role="presentation">
+                    <button
+                        class="inline-block pb-3 border-b-2 rounded-t-lg aria-selected:text-indigo-600 aria-selected:border-indigo-600 transition-all"
+                        id="published-tab" data-tabs-target="#published" type="button" role="tab" aria-selected="true">
+                        Published <span
+                            class="ml-1 px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs">{{published_products.count}}</span>
+                            
+                    </button>
+                </li>
+                <li class="me-6" role="presentation">
+                    <button
+                        class="inline-block pb-3 border-b-2 rounded-t-lg hover:text-slate-600 hover:border-slate-300 aria-selected:text-indigo-600 aria-selected:border-indigo-600 transition-all"
+                        id="draft-tab" data-tabs-target="#draft" type="button" role="tab" aria-selected="false">
+                        Drafts <span
+                            class="ml-1 px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs">{{draft_products.count}}</span>
+                            
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button
+                        class="inline-block pb-3 border-b-2 rounded-t-lg hover:text-slate-600 hover:border-slate-300 aria-selected:text-indigo-600 aria-selected:border-indigo-600 transition-all"
+                        id="disabled-tab" data-tabs-target="#disabled" type="button" role="tab" aria-selected="false">
+                        Disabled <span
+                            class="ml-1 px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs">{{disabled_products.count}}</span>
+                            
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div id="product-tab-content">
+            <div class="hidden" id="published" role="tabpanel" aria-labelledby="published-tab">
+                {% if published_products %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+                    {% for product in published_products %}
+                    {% include 'vendor/includes/modern_product_card.html' with product=product status_color="emerald" %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {% include 'vendor/includes/empty_state.html' with message="No published products" %}
+                {% endif %}
+            </div>
+
+            <div class="hidden" id="draft" role="tabpanel" aria-labelledby="draft-tab">
+                {% if draft_products %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+                    {% for product in draft_products %}
+                    {% include 'vendor/includes/modern_product_card.html' with product=product status_color="amber" %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {% include 'vendor/includes/empty_state.html' with message="No draft products" %}
+                {% endif %}
+            </div>
+
+            <div class="hidden" id="disabled" role="tabpanel" aria-labelledby="disabled-tab">
+                {% if disabled_products %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+                    {% for product in disabled_products %}
+                    {% include 'vendor/includes/modern_product_card.html' with product=product status_color="red" %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                {% include 'vendor/includes/empty_state.html' with message="No disabled products" %}
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+</body>
+
+</html>

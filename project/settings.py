@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
 
     'userauth',
     'store',
+    'vendor',
 
 ]
 
@@ -68,6 +72,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'store.context_processors.cart_wishlist_counts',
+                'store.context_processors.default',
             ],
         },
     },
@@ -133,3 +139,5 @@ AUTH_USER_MODEL = 'userauth.User'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
+
+PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY","")

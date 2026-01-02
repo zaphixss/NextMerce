@@ -1,0 +1,218 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="sticky top-0 z-30 bg-white border-b border-gray-200 lg:hidden overflow-x-auto no-scrollbar">
+    <div class="flex items-center gap-8 px-6">
+
+        <a href="{% url 'customer_dashboard' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_dashboard' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Dashboard
+            {% if request.resolver_match.url_name == 'customer_dashboard' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+        <a href="{% url 'customer_orders' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_orders' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Orders
+            {% if request.resolver_match.url_name == 'customer_orders' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+        <a href="{% url 'customer_wishlist' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_wishlist' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Wishlist
+            {% if request.resolver_match.url_name == 'customer_wishlist' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+        <a href="{% url 'customer_settings' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_settings' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Settings
+            {% if request.resolver_match.url_name == 'customer_settings' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+        <a href="{% url 'customer_reviews' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_reviews' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Pending Reviews
+            {% if request.resolver_match.url_name == 'customer_reviews' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+    </div>
+</div>
+
+<style>
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+<div
+    class="bg-white border-b border-gray-200 py-8 flex lg:flex-row flex-col lg:gap-0 gap-2  items-center justify-between px-4 lg:px-[12rem] xl:px-[19rem]">
+    <h1 class="font-bold text-3xl text-slate-900">Order Details</h1>
+    <div class="text-sm font-medium">
+        <a href="{% url 'index' %}" class="text-slate-500 hover:text-blue-600 transition-colors">Home /</a>
+        <a href="{% url 'customer_orders' %}" class="text-slate-500 hover:text-blue-600 transition-colors">Orders /</a>
+        <span class="text-blue-600">Order #{{order.id}}</span>
+    </div>
+</div>
+
+<section class="bg-[#F9FAFB] py-10 px-4 lg:px-[12rem] xl:px-[19rem]">
+
+    <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
+
+        <aside class="hidden lg:block sticky top-32 self-start h-fit">
+            {% include 'customer/includes/sidebar.html' %}
+        </aside>
+
+        <div class="space-y-6">
+
+            <div
+                class="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-6 rounded-2xl border border-slate-100 shadow-sm gap-4">
+                <div>
+                    <h2 class="font-bold text-xl text-slate-900">Order #{{order.id}}</h2>
+                    <p class="text-sm text-slate-500 mt-1">Placed on {{ order.date|date:"F d, Y" }}</p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium border
+                        {% if order.payment_status == 'Paid' %} bg-emerald-50 text-emerald-700 border-emerald-100
+                        {% elif order.payment_status == 'Pending' %} bg-amber-50 text-amber-700 border-amber-100
+                        {% else %} bg-red-50 text-red-700 border-red-100 {% endif %}">
+
+                        <span class="h-2 w-2 rounded-full 
+                            {% if order.payment_status == 'Paid' %} bg-emerald-500
+                            {% elif order.payment_status == 'Pending' %} bg-amber-500
+                            {% else %} bg-red-500 {% endif %}"></span>
+                        {{ order.payment_status }}
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+                    <h3 class="font-bold text-sm uppercase text-slate-700">Items in Order</h3>
+                </div>
+
+                <div class="divide-y divide-slate-100">
+                    {% for item in items %}
+                    <div
+                        class="flex flex-col sm:flex-row sm:items-center justify-between p-6 hover:bg-slate-50 transition-colors gap-4">
+                        <div class="flex items-start sm:items-center gap-4">
+                            <div
+                                class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100 border border-slate-200">
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                                    class="h-full w-full object-cover object-center">
+                            </div>
+
+                            <div class="flex flex-col">
+                                <h4 class="font-bold text-slate-900 line-clamp-1">{{ item.product.name }}</h4>
+                                <p class="text-xs text-slate-500 mt-1">Category: <span class="text-slate-700">{{ item.product.category.title }}</span></p>
+                                <p class="text-xs text-slate-500 mt-0.5">Qty: <span
+                                        class="font-medium text-slate-900">{{ item.qty }}</span></p>
+                            </div>
+                        </div>
+
+                        <div class="text-left sm:text-right pl-[5.5rem] sm:pl-0">
+                            <p class="font-bold text-lg text-slate-900">${{ item.sub_total }}</p>
+                            <p class="text-xs text-slate-400 mt-1">${{ item.product.sale_price }} each</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="p-12 text-center">
+                        <p class="text-slate-500">No items found in this order.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+                    <div class="text-right">
+                        <p class="text-sm text-slate-500 mb-1">Total Amount</p>
+                        <p class="text-2xl font-bold text-indigo-600">${{order.total}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <div class="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900">Customer Details</h3>
+                    </div>
+
+                    <div class="space-y-4 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Name</span>
+                            <span class="font-medium text-slate-900 text-right">{{ order.fullname }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Email</span>
+                            <span class="font-medium text-slate-900 text-right">{{ order.user.email }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Phone</span>
+                            <span class="font-medium text-slate-900 text-right">{{ order.mobile }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Payment Method</span>
+                            <span class="font-medium text-slate-900 text-right">Online Payment</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <div
+                            class="h-10 w-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900">Delivery Address</h3>
+                    </div>
+
+                    <div class="space-y-4 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Street</span>
+                            <span class="font-medium text-slate-900 text-right">{{ order.address }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">City</span>
+                            <span class="font-medium text-slate-900 text-right">{{ order.city }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">State</span>
+                            <span class="font-medium text-slate-900 text-right">{{ order.state }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Country</span>
+                            <span class="font-medium text-slate-900 text-right">{{ order.country|default:"N/A" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>
+{% endblock content %}

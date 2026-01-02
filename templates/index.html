@@ -1,418 +1,407 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 
-
 {% block content %}
-<section class="px-[19rem] py-[3rem]">
-    <div class="grid grid-cols-[2fr_1fr] gap-4">
+<section class="px-4 md:px-8 lg:px-12 2xl:px-[19rem] py-[3rem]">
+
+    <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4">
 
         <div id="default-carousel" class="relative w-full" data-carousel="slide">
-            <!-- Carousel wrapper -->
-            <div class="relative h-56 overflow-hidden rounded-base h-[32rem] rounded-xl">
+            <div class="relative overflow-hidden rounded-base h-[22rem] md:h-[32rem] rounded-xl">
                 {% for f in featured_products %}
 
-
                 <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                    <img src="{{ f.cover_image.url }}"
-                        class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 object-contain rounded-lg"
+                    <img src="{% if f.cover_image %}{{ f.cover_image.url }}{%endif%}" class="absolute block w-full h-full object-cover rounded-lg"
                         alt="...">
 
-                    <div class="absolute top-[10rem] left-[4rem] text-3xl font-bold text-white z-10">
-                        <h2 class="font-semibold text-white text-xl ">LIMITED EDITION</h2>
-                        <h1 class="font-semibold text-white text-4xl mt-5">{{f.name}}</h1>
-                        <p class="text-sm text-gray-500 font-medium mt-3">Lorem ipsum dolor sit amet consectetur <br>
-                            adipisicing elit. Ex,
-                            ab?</p>
+                    <div class="absolute top-1/2 -translate-y-1/2 left-6 md:left-[4rem] text-white z-10 max-w-[80%]">
+                        <h2 class="font-semibold text-white text-sm md:text-xl uppercase tracking-wider">LIMITED EDITION
+                        </h2>
+                        <h1 class="font-semibold text-white text-3xl md:text-5xl mt-2 md:mt-4 leading-tight">{{f.name}}
+                        </h1>
+                        <p class="text-sm text-gray-200 font-medium mt-3 hidden md:block max-w-md">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, ab?
+                        </p>
 
-                        <a href="#" class="font-medium text-sm py-2.5 px-5 bg-[#3a97fe] rounded-full mt-[2rem]">Shop
-                            Now</a>
+                        <a href="{% url 'product_detail' f.slug %}">
+                            <button
+                                class="font-medium text-xs md:text-sm py-2.5 px-5 md:py-3 md:px-7 bg-[#3a97fe] rounded-full mt-4 md:mt-6 hover:bg-blue-600 transition-colors">
+                                Shop Now
+                            </button>
+                        </a>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-            <!-- Slider indicators -->
+
             <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-                <button type="button" class="w-5 h-1 rounded-base" aria-current="true" aria-label="Slide 1"
-                    data-carousel-slide-to="0"></button>
-                <button type="button" class="w-5 h-1 rounded-base" aria-current="false" aria-label="Slide 2"
-                    data-carousel-slide-to="1"></button>
-                <button type="button" class="w-5 h-1 rounded-base" aria-current="false" aria-label="Slide 3"
-                    data-carousel-slide-to="2"></button>
-
-            </div>
-
-        </div>
-
-        <div class="space-y-4">
-            <div class="rounded-xl bg-[#D7EBF2] p-5 w-full ">
-                <img src="https://demo.nextmerce.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Frpq7htxl%2Fproduction%2F8e4cb1084e433d3220697458461de41a51c91818-176x212.png&w=256&q=75"
-                    alt="">
-            </div>
-            <div class="rounded-xl bg-[#EAE7DE] p-5 w-full">
-                <img src="https://demo.nextmerce.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Frpq7htxl%2Fproduction%2F0d5daaaaa7554a8765e5feff240a4370eb50a9c5-176x212.png&w=256&q=75"
-                    alt="">
+                <button type="button" class="w-3 h-3 rounded-full bg-white/50 hover:bg-white" aria-current="true"
+                    aria-label="Slide 1" data-carousel-slide-to="0"></button>
+                <button type="button" class="w-3 h-3 rounded-full bg-white/50 hover:bg-white" aria-current="false"
+                    aria-label="Slide 2" data-carousel-slide-to="1"></button>
+                <button type="button" class="w-3 h-3 rounded-full bg-white/50 hover:bg-white" aria-current="false"
+                    aria-label="Slide 3" data-carousel-slide-to="2"></button>
+                <button type="button" class="w-3 h-3 rounded-full bg-white/50 hover:bg-white" aria-current="false"
+                    aria-label="Slide 3" data-carousel-slide-to="2"></button>
             </div>
         </div>
 
-
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+    
+        <div
+            class="rounded-2xl bg-[#D7EBF2] p-6 w-full flex flex-row items-center justify-between h-[200px] lg:h-auto relative overflow-hidden group">
+    
+            <div class="flex flex-col justify-center z-10 h-full">
+                <a href="{% url 'product_detail' new_arrivals.6.slug %}" class="block mb-1">
+                    <h2
+                        class="text-xl font-bold text-[#002147] leading-tight max-w-[140px] group-hover:text-blue-600 transition-colors">
+                        {{ new_arrivals.6.name }}
+                    </h2>
+                </a>
+    
+                <p class="text-sm font-medium text-[#002147] mt-auto lg:mt-4">
+                    Save up to <span class="text-[#3b59ff] font-bold">$450</span>
+                </p>
+            </div>
+    
+            <div class="h-full w-[45%] flex items-end justify-end absolute right-4 bottom-0">
+                <img class="h-[85%] w-auto object-contain transition-transform duration-500 group-hover:scale-110 pb-4"
+                    src="https://demo.nextmerce.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Frpq7htxl%2Fproduction%2F8e4cb1084e433d3220697458461de41a51c91818-176x212.png&w=256&q=75"
+                    alt="{{ new_arrivals.6.name }}">
+            </div>
+        </div>
+    
+        <div
+            class="rounded-2xl bg-[#EAE7DE] p-6 w-full flex flex-row items-center justify-between h-[200px] lg:h-auto relative overflow-hidden group">
+    
+            <div class="flex flex-col justify-center z-10 h-full">
+                <a href="{% url 'product_detail' new_arrivals.5.slug %}" class="block mb-1">
+                    <h2
+                        class="text-xl font-bold text-[#002147] leading-tight max-w-[140px] group-hover:text-blue-600 transition-colors">
+                        {{ new_arrivals.5.name }}
+                    </h2>
+                </a>
+    
+                <p class="text-sm font-medium text-[#002147] mt-auto lg:mt-4">
+                    Save up to <span class="text-[#3b59ff] font-bold">$600</span>
+                </p>
+            </div>
+    
+            <div class="h-full w-[45%] flex items-end justify-end absolute right-4 bottom-0">
+                <img class="h-[90%] w-auto object-contain transition-transform duration-500 group-hover:scale-110 pb-0"
+                    src="https://demo.nextmerce.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Frpq7htxl%2Fproduction%2F0d5daaaaa7554a8765e5feff240a4370eb50a9c5-176x212.png&w=256&q=75"
+                    alt="{{ new_arrivals.5.name }}">
+            </div>
+        </div>
+    
+    </div>
     </div>
 
-    <div class="flex flex-wrap items-center justify-center gap-[5rem] text-slate-800 text-sm mt-10 ">
-        <!-- Free Shipping -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
         <div class="flex items-start gap-3">
-            <i class="fa-solid fa-rocket text-4xl"></i>
+            <i class="fa-solid fa-rocket text-2xl md:text-4xl text-blue-600"></i>
             <div>
-                <h3 class="font-semibold">Free Shipping</h3>
+                <h3 class="font-bold text-sm md:text-base">Free Shipping</h3>
                 <p class="text-xs text-slate-500">For all orders $200</p>
             </div>
         </div>
 
-        <!-- 1 & 1 Returns -->
         <div class="flex items-start gap-3">
-            <i class="fa-solid fa-arrows-rotate text-4xl"></i>
+            <i class="fa-solid fa-arrows-rotate text-2xl md:text-4xl text-blue-600"></i>
             <div>
-                <h3 class="font-semibold">1 &amp; 1 Returns</h3>
+                <h3 class="font-bold text-sm md:text-base">1 &amp; 1 Returns</h3>
                 <p class="text-xs text-slate-500">Cancellation after 1 day</p>
             </div>
         </div>
 
-        <!-- Secure Payments -->
         <div class="flex items-start gap-3">
-            <i class="fa-solid fa-shield-halved text-4xl"></i>
+            <i class="fa-solid fa-shield-halved text-2xl md:text-4xl text-blue-600"></i>
             <div>
-                <h3 class="font-semibold">100% Secure Payments</h3>
+                <h3 class="font-bold text-sm md:text-base">100% Secure</h3>
                 <p class="text-xs text-slate-500">Guarantee secure payments</p>
             </div>
         </div>
 
-        <!-- Support -->
         <div class="flex items-start gap-3">
-            <i class="fa-solid fa-comment-dots text-4xl"></i>
+            <i class="fa-solid fa-comment-dots text-2xl md:text-4xl text-blue-600"></i>
             <div>
-                <h3 class="font-semibold">24/7 Dedicated Support</h3>
+                <h3 class="font-bold text-sm md:text-base">24/7 Support</h3>
                 <p class="text-xs text-slate-500">Anywhere &amp; anytime</p>
             </div>
         </div>
     </div>
 
     <div class="mt-[5rem] border-b border-gray-200 pb-[3rem]">
-        <h1 class="font-medium text-3xl">Browse by Category</h1>
-        <div class="flex items-center justify-between mt-10">
+        <h1 class="font-medium text-2xl md:text-3xl">Browse by Category</h1>
+        <div class="flex flex-wrap justify-center md:justify-between mt-10 gap-6">
             {% for c in categories %}
-            <a href="{% url 'category_detail' c.id %}">
+            <a href="{% url 'category_detail' c.id %}" class="group">
                 <div class="flex flex-col items-center gap-2">
-                    <div class="bg-[#eae7de] h-[8rem] w-[8rem] rounded-full overflow-hidden flex items-center justify-center">
-                        <img src="{{ c.image.url }}" alt="{{ c }}" class="w-[5.5rem] h-[5.5rem] object-contain">
+                    <div
+                        class="bg-[#eae7de] h-[6rem] w-[6rem] md:h-[8rem] md:w-[8rem] rounded-full overflow-hidden flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+                        <img src="{{ c.image.url }}" alt="{{ c }}"
+                            class="w-[4rem] h-[4rem] md:w-[5.5rem] md:h-[5.5rem] object-contain group-hover:scale-110 transition-transform">
                     </div>
-                    <p class="mt-1 text-center font-medium">{{ c.title }}</p>
+                    <p class="mt-1 text-center font-medium group-hover:text-blue-600">{{ c.title }}</p>
                 </div>
             </a>
             {% endfor %}
-
         </div>
-
     </div>
 
-    <div class="mt-[5rem] ">
-        <div class="flex justify-between">
-            <h1 class="font-medium text-3xl">New Arrivals</h1>
-            <a href="{% url 'shop' %}" class="py-1 px-4 bg-[#e1e1e1] rounded-full border border-[#E5E7EB] font-medium">View All</a>
+    <div class="mt-[5rem]">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="font-medium text-2xl md:text-3xl">New Arrivals</h1>
+            <a href="{% url 'shop' %}"
+                class="py-1 px-4 bg-[#e1e1e1] rounded-full border border-[#E5E7EB] font-medium text-sm md:text-base hover:bg-gray-200 transition-colors">
+                View All
+            </a>
         </div>
-        <div class="grid grid-cols-4 gap-6">
+
+        <div class="grid  md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {% for n in new_arrivals|slice:":8" %}
-            <div>
-                <!-- Card -->
-                <div class="rounded-2xl bg-[#f5f7fb] p-4 shadow-sm cursor-pointer mt-[2rem]"
-                    onclick='window.location.href="{% url "product_detail" n.slug %}"'>
-                    <!-- Product image -->
-                    <div class="flex items-center justify-center h-48">
-                        <img src="{{ n.image.url }}" alt="{{ n.name }}" class="max-h-full object-contain" />
+            <div class="group">
+                <div class="rounded-2xl bg-[#f5f7fb] p-4 shadow-sm cursor-pointer relative hover:shadow-md transition-all duration-300">
+
+                    <div class="flex items-center justify-center h-40 md:h-48 mb-4">
+                        <img src="{{ n.image.url }}" alt="{{ n.name }}"
+                            class="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500" />
                     </div>
 
-                    <!-- Actions -->
-                    <div class="mt-4 flex items-center justify-center  gap-[1rem]">
+                    <div
+                        class="flex items-center justify-center gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
+                       
+                         <input id="qty-input" type="number" min="1" value="1" class="border p-2 w-20 hidden" />
 
-                        <a href="{% url 'add_cart' n.id %}">
-                            <button class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50">
-                                                    <i class="fa-solid fa-cart-shopping  text-sm"></i>
+                    <button type="button"
+                        class="js-add-cart flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-blue-600 hover:text-white transition-colors"
+                        data-url="{% url 'add_cart' n.id %}">
+                        <i class="fa-solid fa-cart-shopping text-sm"></i>
+                    </button>
+                    
+                    <button type="button"
+                        class="js-wishlist flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-red-500 hover:text-white transition-colors"
+                        data-url="{% url 'add_wishlist' n.id %}">
+                        <i class="fa-regular fa-heart text-sm"></i>
+                    </button>
 
-                            </button>
-                        </a>
-
-                        <a href="{% url 'add_wishlist' n.id%}">
-                            <button
-                                class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50">
-                                <i class="fa-regular fa-heart text-sm"></i>
-                            </button>
-                        </a>
+                       
+                       
                     </div>
-
                 </div>
-                <!-- Title -->
-                <h3 class="mt-3 text-sm font-semibold text-slate-900">
+
+                <h3 class="mt-3 text-sm font-semibold text-slate-900 line-clamp-1">
                     {{ n.name }}
                 </h3>
-
-                <!-- Prices -->
                 <div class="mt-1 flex items-center gap-2 text-sm">
                     <span class="font-bold text-slate-900">${{ n.sale_price }}</span>
                     {% if n.regular_price %}
-                    <span class="text-slate-400 line-through">${{ n.regular_price}}</span>
+                    <span class="text-slate-400 line-through text-xs">${{ n.regular_price}}</span>
                     {% endif %}
                 </div>
             </div>
             {% endfor %}
-
         </div>
     </div>
 
     <div
-        class="mt-[5rem] relative w-full h-[26rem] bg-[#f5f7fb] rounded-2xl px-10 py-8 flex flex-col md:flex-row items-center justify-between gap-10">
-
-        {% for f in featured_products|slice:":1" %}
-        <!-- Left: Text -->
-        <div class="max-w-xl">
-            <a href="#" class="text-sm font-semibold text-gray-500 mb-2">
+        class="mt-[5rem] relative w-full h-auto md:h-[25rem] bg-[#f5f7fb] rounded-2xl px-6 pt-10 pb-0 md:py-0 md:px-10 flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden">
+    
+        <div class="max-w-xl text-center md:text-left z-10">
+            <a href="#" class="text-sm font-semibold text-gray-500 mb-2 block uppercase tracking-wide">
                 {{ featured_products.2.name }}
             </a>
-
-            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-3">
+            <h2 class="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-4">
                 UP TO 30% OFF
             </h2>
-
-            <p class="text-sm md:text-base text-gray-600 mb-6">
+            <p class="text-sm md:text-base text-gray-600 mb-8 max-w-md mx-auto md:mx-0">
                 iPhone 14 has the same superspeedy chip that's in iPhone 13 Pro, A15 Bionic,
                 with a 5-core GPU, powers all the latest features.
             </p>
-            
-            <a href="{% url 'product_detail' f.id %}"
-                class="inline-flex items-center px-6 py-3 rounded-full text-white text-sm font-semibold bg-[#3b5cff] hover:bg-[#3047cc] transition">
+            <a href="{% url 'product_detail' featured_products.2.slug %}"
+                class="inline-flex items-center px-8 py-3 rounded-full text-white text-sm font-semibold bg-[#3b5cff] hover:bg-[#3047cc] transition shadow-lg shadow-blue-200">
                 Buy Now
             </a>
         </div>
-
-        <!-- Right: Image -->
-        <div class="w-full md:w-auto max-w-xs absolute bottom-0 right-[7rem]">
+    
+        <div class="w-full md:w-[45%] relative md:self-end">
             <img src="https://demo.nextmerce.com/_next/image?url=%2Fimages%2Fpromo%2Fpromo-01.png&w=384&q=75"
-                alt="Apple iPhone 14 Plus" class="w-full h-auto object-contain" />
+                alt="Apple iPhone 14 Plus" class="w-full h-[20rem] md:h-[23rem] object-contain object-bottom" />
         </div>
-        {% endfor %}
-
-
-
     </div>
 
-    <div class="grid grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
 
-        {% for f in featured_products|slice:":1" %}
-        <div>
-            <div
-                class="w-full mt-10 rounded-2xl bg-[#dff7f3] px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-8">
-                <!-- Left: Image -->
-                <div class="w-full md:w-1/2 flex justify-center">
-                    <img src="{{ f.image.url }}" alt="{{ f.name }}" class="max-h-56 w-auto object-contain" />
-                </div>
-
-                <!-- Right: Text + CTA -->
-                <div class="w-full md:w-1/2 flex flex-col items-start text-center md:text-left space-y-2">
-                    <p class="text-sm font-medium text-slate-700">
-                        {{ f.name }}
-                    </p>
-
-                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">
-                        Workout At Home
-                    </h2>
-
-                    <p class="text-base font-semibold text-emerald-700">
-                        Flat 20% off
-                    </p>
-
-                    <a href="#"
-                        class="mt-4 inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow-md hover:bg-emerald-700 transition">
-                        Grab Now
-                    </a>
-                </div>
+        <div
+            class="w-full rounded-2xl bg-[#dff7f3] px-6 py-8 flex flex-col-reverse sm:flex-row items-center justify-between gap-6">
+            <div class="w-full sm:w-1/2 flex justify-center">
+                <img src="{{ featured_products.1.image.url }}" alt="{{ f.name }}" class="h-48 w-auto object-contain" />
+            </div>
+            <div class="w-full sm:w-1/2 text-center sm:text-left">
+                <p class="text-sm font-medium text-slate-700 mb-1">{{ featured_products.1.name }}</p>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-tight mb-2">Workout At Home</h2>
+                <p class="text-sm font-bold text-emerald-600 mb-4">Flat 20% off</p>
+                <a href="{% url 'product_detail' featured_products.1.slug %}"
+                    class="inline-flex items-center justify-center px-6 py-2 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow-md hover:bg-emerald-700 transition">
+                    Grab Now
+                </a>
             </div>
         </div>
-        {% endfor %}
 
-        {% for f in featured_products|slice:"1:2" %}
-        <div>
-            <div
-                class="w-full mt-10 rounded-2xl bg-[#ffefe1] px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-8">
-                <!-- Left: Text + CTA -->
-                <div class="w-full md:w-1/2 flex flex-col items-start text-center md:text-left space-y-2">
-                    <p class="text-sm font-medium text-slate-700">
-                        {{ f.name }}
-                    </p>
-
-                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">
-                        Up to 40% off
-                    </h2>
-
-                    <p class="text-base text-slate-700">
-                        The aerospace-grade titanium case strikes the perfect balance of everything.
-                    </p>
-
-                    <a href="#"
-                        class="mt-4 inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-orange-500 text-white text-sm font-semibold shadow-md hover:bg-orange-600 transition">
-                        Buy Now
-                    </a>
-                </div>
-
-                <!-- Right: Image -->
-                <div class="w-full md:w-1/2 flex justify-center">
-                    <img src="{{ f.image.url }}" alt="{{ f.name }}" class="max-h-56 w-auto object-contain" />
-                </div>
+        <div
+            class="w-full rounded-2xl bg-[#ffefe1] px-6 py-8 flex flex-col-reverse sm:flex-row-reverse items-center justify-between gap-6">
+            <div class="w-full sm:w-1/2 flex justify-center">
+                <img src="{{ featured_products.0.image.url }}" alt="{{ f.name }}" class="h-48 w-auto object-contain" />
+            </div>
+            <div class="w-full sm:w-1/2 text-center sm:text-left">
+                <p class="text-sm font-medium text-slate-700 mb-1">{{ featured_products.0.name }}</p>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-tight mb-2">Up to 40% off</h2>
+                <p class="text-xs text-slate-600 mb-4">The aerospace-grade titanium case strikes the perfect balance.
+                </p>
+                <a href="{% url 'product_detail' featured_products.0.slug %}"
+                    class="inline-flex items-center justify-center px-6 py-2 rounded-full bg-orange-500 text-white text-sm font-semibold shadow-md hover:bg-orange-600 transition">
+                    Buy Now
+                </a>
             </div>
         </div>
-        {% endfor %}
-
     </div>
 
-    <div class=" mt-[5rem]">
-        <h1 class="font-medium text-3xl">Best Sellers</h1>
-
-        <div class="grid grid-cols-3 gap-[2rem] mt-[2rem]">
-
+    <div class="mt-[5rem]">
+        <h1 class="font-medium text-2xl md:text-3xl mb-6">Best Sellers</h1>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for b in best_selling|slice:":6" %}
-            <div class="relative w-full h-[23rem] rounded-2xl bg-[#f5f7fb] px-6 py-6 flex flex-col items-center shadow-sm cursor-pointer transition hover:-translate-y-1 hover:shadow-md"
+            <div class="relative w-full rounded-2xl bg-[#f5f7fb] p-6 flex flex-col items-center shadow-sm cursor-pointer transition hover:-translate-y-1 hover:shadow-md group"
                 onclick='window.location.href="{% url "product_detail" b.slug %}"'>
-                <!-- Title -->
-                <h3 class="text-center text-sm font-semibold text-slate-900 mb-2">
+
+                <h3 class="text-center text-sm font-semibold text-slate-900 mb-2 line-clamp-1">
                     {{b.name}}
                 </h3>
 
-                <!-- Prices -->
                 <div class="flex items-center gap-2 mb-4">
                     <span class="text-sm text-slate-400 line-through">{{b.regular_price}}</span>
                     <span class="text-sm font-semibold text-slate-900">{{b.sale_price}}</span>
                 </div>
 
-                <!-- Product image -->
-                <div class="w-full flex justify-center mb-4">
-                    <img src="{{b.image.url}}" alt="Apple iMac M4 24-inch 2025"
-                        class="h-[16rem] w-auto object-contain" />
+                <div class="w-full flex justify-center mb-4 h-48">
+                    <img src="{{b.image.url}}" alt="{{ b.name }}"
+                        class="h-full w-auto object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500" />
                 </div>
 
-                <!-- Right vertical action buttons -->
-                <div class="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3">
-                   
-                  <a href="{% url 'add_cart' b.id%}">
-                    <button type="button"
-                        class="h-9 w-9 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-200">
-                        <i class="fa-solid fa-cart-shopping text-[#2648D0] text-sm"></i>
-                    </button>
-                  </a>
+                <div
+                    class="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
+                    <a href="{% url 'add_cart' b.id%}">
+                        <button type="button"
+                            class="h-10 w-10 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-blue-600 hover:text-white transition-colors text-[#2648D0]">
+                            <i class="fa-solid fa-cart-shopping text-sm"></i>
+                        </button>
+                    </a>
                     <a href="{% url 'add_wishlist' b.id%}">
                         <button type="button"
-                            class="h-9 w-9 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-200">
-                            <i class="fa-regular fa-heart text-[#2648D0] text-sm hover-"></i>
+                            class="h-10 w-10 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-red-500 hover:text-white transition-colors text-[#2648D0]">
+                            <i class="fa-regular fa-heart text-sm"></i>
                         </button>
                     </a>
                 </div>
             </div>
-
             {% endfor %}
-
         </div>
 
-        <div class="flex items-center justify-center mt-[2rem]">
-            <a href="{% url 'best_selling' %}" class="py-2 px-7 bg-[#F2F3F8] text-sm font-medium border border-gray-400 rounded-full">View All</a>
+        <div class="flex items-center justify-center mt-10">
+            <a href="{% url 'best_selling' %}"
+                class="py-2.5 px-8 bg-[#F2F3F8] text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition-colors">
+                View All Best Sellers
+            </a>
         </div>
     </div>
 
-    <div class="mt-10 w-full rounded-3xl relative overflow-hidden bg-[#d7ecfb]">
-        <!-- Background image -->
+    <div class="mt-16 w-full rounded-3xl relative overflow-hidden bg-[#d7ecfb]">
         <img src="https://demo.nextmerce.com/_next/image?url=%2Fimages%2Fcountdown%2Fcountdown-bg.png&w=750&q=75" alt=""
-            class="absolute inset-0 w-full h-full object-cover" />
+            class="absolute inset-0 w-full h-full object-cover opacity-50 md:opacity-100" />
 
-        <!-- Content -->
-        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between px-10 py-10 gap-10">
-            <!-- Left: Text + Timer -->
-            <div class="max-w-xl">
-                <p class="text-sm font-semibold text-[#1c4bcf] mb-2">
-                    Don’t Miss!!
-                </p>
-
-                <h2 class="text-3xl md:text-4xl font-bold text-[#132146] leading-tight mb-3">
-                    Enhance Your Music<br />
-                    Experience
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between px-6 py-12 md:px-12 gap-10">
+            <div class="max-w-xl text-center md:text-left">
+                <p class="text-sm font-bold text-[#1c4bcf] mb-2 uppercase tracking-wider">Don’t Miss!!</p>
+                <h2 class="text-3xl md:text-5xl font-bold text-[#132146] leading-tight mb-4">
+                    Enhance Your Music<br />Experience
                 </h2>
-
-                <p class="text-sm md:text-base text-[#273557] mb-6">
-                    iPhone 16 Pro Max
+                <p class="text-sm md:text-base text-[#273557] mb-8 font-medium">
+                    {{featured_products.3.name}}
                 </p>
 
-                <!-- Countdown boxes -->
-                <div class="flex flex-wrap gap-4 mb-8">
+                <div class="flex flex-wrap justify-center md:justify-start gap-3 md:gap-4 mb-8">
                     <div
                         class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white shadow-sm">
                         <span class="text-lg md:text-2xl font-bold text-[#132146]">06</span>
-                        <span class="text-[11px] md:text-xs text-gray-500">Days</span>
+                        <span class="text-[10px] md:text-xs text-gray-500 uppercase">Days</span>
                     </div>
                     <div
                         class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white shadow-sm">
                         <span class="text-lg md:text-2xl font-bold text-[#132146]">19</span>
-                        <span class="text-[11px] md:text-xs text-gray-500">Hours</span>
+                        <span class="text-[10px] md:text-xs text-gray-500 uppercase">Hours</span>
                     </div>
                     <div
                         class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white shadow-sm">
                         <span class="text-lg md:text-2xl font-bold text-[#132146]">29</span>
-                        <span class="text-[11px] md:text-xs text-gray-500">Minutes</span>
+                        <span class="text-[10px] md:text-xs text-gray-500 uppercase">Mins</span>
                     </div>
                     <div
                         class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white shadow-sm">
                         <span class="text-lg md:text-2xl font-bold text-[#132146]">24</span>
-                        <span class="text-[11px] md:text-xs text-gray-500">Seconds</span>
+                        <span class="text-[10px] md:text-xs text-gray-500 uppercase">Secs</span>
                     </div>
                 </div>
 
-                <!-- Button -->
-                <a href="#"
-                    class="inline-flex items-center justify-center px-7 py-3 rounded-full bg-[#3254f6] text-white text-sm font-semibold shadow-md hover:bg-[#2643cc] transition">
+                <a href="{% url 'product_detail' featured_products.3.slug %}"
+                    class="inline-flex items-center justify-center px-8 py-3 rounded-full bg-[#3254f6] text-white text-sm font-bold shadow-lg shadow-blue-300 hover:bg-[#2643cc] transition">
                     Check it Out!
                 </a>
             </div>
 
-            <!-- Right: Headphone image -->
             <div class="w-full md:w-auto flex justify-center">
                 <img src="https://demo.nextmerce.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Frpq7htxl%2Fproduction%2Fc6244264720ff53b24288804d8f973549a005ac7-411x376.png&w=640&q=75"
-                    alt="Headphones" class="max-h-64 md:max-h-80 w-auto object-contain" />
+                    alt="Headphones" class="max-h-64 md:max-h-96 w-auto object-contain drop-shadow-xl" />
             </div>
         </div>
     </div>
 
-    <div class="mt-10 w-full rounded-xl bg-gradient-to-r from-[#0052ff] to-[#0084ff] px-8 py- md:px-12 md:py-12">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-            <!-- Left: Text -->
-            <div class="text-white">
-                <h2 class="text-xl md:text-3xl font-bold leading-snug">
-                    Don't Miss Out Latest<br />
-                    Trends & Offers
+    <div
+        class="mt-16 w-full rounded-2xl bg-gradient-to-r from-[#0052ff] to-[#0084ff] px-6 py-10 md:px-12 md:py-16 relative overflow-hidden">
+        <div
+            class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none">
+        </div>
+
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="text-white text-center md:text-left">
+                <h2 class="text-2xl md:text-3xl font-bold leading-tight">
+                    Don't Miss Out Latest<br />Trends & Offers
                 </h2>
-                <p class="mt-2 text-sm md:text-base text-blue-100">
+                <p class="mt-2 text-sm md:text-base text-blue-100 opacity-90">
                     Register to receive news about the latest offers &amp; discount codes
                 </p>
             </div>
 
-            <!-- Right: Form -->
             <form action="#" method="post"
-                class="w-full md:w-auto flex items-center bg-white rounded-full pl-5 pr-2 py-2 shadow-md gap-2">
-                <!-- CSRF in Django: {% csrf_token %} -->
-
-                <input type="email" name="email" placeholder="Enter your email"
-                    class="flex-1 bg-transparent outline-none text-sm md:text-base text-gray-800 placeholder:text-gray-400 focus:ring-0 border-0 outline-0"
+                class="w-full md:w-auto max-w-md flex items-center bg-white rounded-full p-1.5 shadow-lg">
+                {% csrf_token %}
+                <div class="pl-4 text-gray-400">
+                    <i class="fa-regular fa-envelope"></i>
+                </div>
+                <input type="email" name="email" placeholder="Enter your email address"
+                    class="flex-1 bg-transparent border-none text-sm md:text-base text-gray-800 placeholder:text-gray-400 focus:ring-0 px-3 outline-none"
                     required />
 
                 <button type="submit"
-                    class="px-5 md:px-6 py-2 rounded-full bg-[#3a4bff] text-white text-sm font-semibold whitespace-nowrap hover:bg-[#2a3bd6] transition">
+                    class="lg:px-6 px-3 py-2.5 rounded-full bg-[#3a4bff] text-white text-sm font-bold whitespace-nowrap hover:bg-[#2a3bd6] transition shadow-md">
                     Subscribe
                 </button>
             </form>
         </div>
     </div>
 
-
 </section>
+
+
 {% endblock content %}

@@ -4,327 +4,541 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>NextMerce</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.1/flowbite.min.css" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class=" py-4 ">
-    <nav class="">
-        <div class="flex items-center justify-between border-b border-gray-200 pb-3 px-[19rem]">
-            <div class="flex items-center gap-10">
+<body class="bg-white font-sans text-slate-900">
+
+    <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-200">
+
+        <div class="lg:hidden px-4 py-3 flex flex-col gap-4">
+
+            <div class="flex justify-between items-center">
                 <a href="{% url 'index' %}">
-                    <img src="https://demo.nextmerce.com/images/logo/logo.svg" alt="">
+                    <img src="https://demo.nextmerce.com/images/logo/logo.svg" alt="Logo" class="h-7">
                 </a>
-                <div class="flex items-center gap-3">
-                    <button id="dropdownDefaultButton" type="button" data-dropdown-toggle="dropdownMenu"
-                        class="inline-flex items-center justify-center rounded-full bg-[#F9FAFB] px-4 py-2.5 text-sm font-medium text-black shadow-sm  focus:outline-none border border-[#E5E7EB]">
-                        All Categories
-                        <svg class="ms-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m19 9-7 7-7-7" />
-                        </svg>
-                    </button>
-
-                    <!-- Dropdown menu -->
-                    <div id="dropdownMenu"
-                        class="absolute right-0 z-20 mt-2 hidden w-44 rounded-lg border border-zinc-200 bg-white text-sm shadow-lg">
-                        <ul class="py-1 text-zinc-700" aria-labelledby="dropdownDefaultButton">
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-zinc-50 hover:text-zinc-900">
-                                    Dashboard
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-zinc-50 hover:text-zinc-900">
-                                    Settings
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-zinc-50 hover:text-zinc-900">
-                                    Earnings
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-zinc-50 hover:text-red-600">
-                                    Sign out
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div
-                        class="flex items-center rounded-full bg-[#F9FAFB] px-4 py-1 w-[30rem] border border-[#E5E7EB]">
-                        <input type="text" placeholder="I am shopping for..."
-                            class="flex-1 bg-transparent text-sm text-zinc-800 placeholder:text-zinc-400 focus:outline-none border-none focus:ring-0" />
-
-                        <button type="submit"
-                            class="ml-2 inline-flex h-7 w-7 items-center justify-center rounded-full border border-zinc-300 text-zinc-500 hover:bg-zinc-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="7" />
-                                <line x1="16" y1="16" x2="20" y2="20" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
             </div>
 
-            <div class="flex items-center gap-6 text-sm">
-                <!-- Account -->
-                <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-300">
-                        <i class="fa-regular fa-user text-lg text-zinc-700"></i>
-                    </div>
-
-                    {% if user.is_authenticated %}
-                    <div>
-                        <p class="text-[11px] uppercase tracking-wide text-zinc-500">Account</p>
-                        <p class="font-medium capitalize">{{user.username}}</p>
-                    </div>
-
-                    {% else %}
-                    <div>
-                        <p class="text-[11px] uppercase tracking-wide text-zinc-500">Account</p>
-                        <a href="{% url 'login' %}" class="text-sm font-semibold text-blue-600 hover:underline">
-                            Sign In /
-                        </a>
-
-                        <a href="{% url 'register' %}" class="text-sm font-semibold text-blue-600 hover:underline">
-                            Register
-                        </a>
-                    </div>
-                    {% endif %}
-
+            <div class="flex gap-2 w-full">
+                <button id="mobileCatDropdownBtn" data-dropdown-toggle="mobileCatDropdown"
+                    class="flex-shrink-0 inline-flex items-center justify-center bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-full px-4 py-2.5 whitespace-nowrap">
+                    <i class="fa-solid fa-bars mr-2"></i> All Categories
+                </button>
+                <div id="mobileCatDropdown"
+                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-44 border border-slate-100">
+                    <ul class="py-2 text-sm text-gray-700" aria-labelledby="mobileCatDropdownBtn">
+                        {% for c in categories %}
+                        <li>
+                            <a href="{% url 'category_detail' c.id %}"
+                                class="block px-4 py-2 hover:bg-gray-100">{{c.title}}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
 
-                <!-- Wishlist & Cart -->
-                <div class="flex items-center gap-3">
-                    <!-- Wishlist -->
-                    <a href="{% url 'wishlist' %}">
-                        <button class="relative text-xl text-zinc-700">
-                            <i class="fa-regular fa-heart"></i>
-                            <span
-                                class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-semibold text-white">
-                                {{wishlist.count}}
-                            </span>
-                        </button>
-                    </a>
+                <form action="{% url 'search_view' %}" method="GET" class="w-full relative">
+                    <input type="text" name="q" value="{{q}}" placeholder="Search..."
+                        class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-full py-2.5 pl-4 pr-10 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
 
-                    <!-- Cart -->
-                    <a href="{% url 'cart' %}">
-                        <button class="relative text-xl text-zinc-700">
-                            <i class="fa-solid fa-shopping-bag"></i>
-                            <span
-                                class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-semibold text-white">
-                                {{cart.count}}
-                            </span>
-                        </button>
-                    </a>
+            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
 
+                <div class="flex items-center gap-5">
+                    <a href="{% url 'wishlist' %}" class="relative text-slate-600">
+                        <i class="fa-regular fa-heart text-xl"></i>
+                        {% if WISHLIST_ITEM_COUNT > 0 %}
+                        <span id="wishlis-count"
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white">
+                            {{WISHLIST_ITEM_COUNT}}
+                        </span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'cart' %}" class="relative text-slate-600">
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        {% if CART_ITEM_COUNT > 0 %}
+                        <span id="cart-count"
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white">
+                            {{CART_ITEM_COUNT}}
+                        </span>
+                        {% endif %}
+                    </a>
                 </div>
+
+                <button type="button" data-drawer-target="mobile-menu-drawer" data-drawer-show="mobile-menu-drawer"
+                    data-drawer-placement="right" aria-controls="mobile-menu-drawer"
+                    class="text-slate-700 focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
 
-        <div class="flex items-center justify-between border-b border-gray-200 py-5 px-[19rem]">
-            <ul class="flex items-center gap-10 text-sm font-medium">
-                <li><a href="{% url 'best_selling' %}">Popular</a></li>
-                <li><a href="{% url 'shop' %}">Shop</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
 
-            <a href="{% url 'best_selling' %}" class="flex items-center gap-2 font-medium text-sm">
-                Best Selling
-                <span class="bg-red-500 text-white text-[11px] font-medium rounded-full  px-2">SALE</span>
-            </a>
+        <div
+            class="hidden lg:flex flex-col lg:flex-row items-center justify-between py-4 px-4 md:px-8 lg:px-12 2xl:px-[19rem] gap-4 lg:gap-0">
+
+            <div class="flex items-center gap-5">
+                <div class="flex flex-col lg:flex-row items-center gap-4 lg:gap-8 w-full lg:w-auto">
+                    <a href="{% url 'index' %}" class="flex-shrink-0">
+                        <img src="https://demo.nextmerce.com/images/logo/logo.svg" alt="Logo" class="h-8 md:h-9">
+                    </a>
+
+                    <div class="relative w-full md:w-auto">
+                        <button id="dropdownDefaultButton" type="button" data-dropdown-toggle="dropdownMenu"
+                            class="inline-flex items-center justify-between w-full md:w-auto rounded-full bg-slate-50 px-5 py-2.5 text-sm font-medium text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-100 transition-colors">
+                            All Categories
+                            <svg class="ms-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m19 9-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <div id="dropdownMenu"
+                            class="absolute left-0 z-[99] mt-2 hidden w-full md:w-56 rounded-xl border border-slate-100 bg-white text-sm shadow-xl p-2">
+                            <ul class="py-1 text-zinc-700" aria-labelledby="dropdownDefaultButton">
+                                {% for c in categories %} <li>
+                                    <a href="{% url 'category_detail' c.id %}"
+                                        class="block px-4 py-2 hover:bg-zinc-50 hover:text-zinc-900">
+                                        {{c.title}}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-[25rem] xl:w-[32rem]">
+                    <form action="{% url 'search_view' %}" method="GET" class="relative">
+                        <div
+                            class="flex items-center rounded-full bg-slate-50 border border-slate-200 px-5 py-2.5 hover:border-indigo-300 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all">
+                            <input type="text" placeholder="I am shopping for..." name="q" value="{{q}}"
+                                class="flex-1 bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none border-none p-0 focus:ring-0" />
+
+                            <button type="submit" class="ml-2 text-slate-400 hover:text-indigo-600 transition-colors">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+
+                <div>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'customer_dashboard' %}" class="group flex items-center gap-3">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-slate-600 group-hover:bg-indigo-50 group-hover:text-indigo-600 group-hover:border-indigo-100 transition-all">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <div class="hidden xl:block text-left">
+                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Account</p>
+                            <p class="text-sm font-bold text-slate-900 truncate max-w-[80px]">{{user.username}}</p>
+                        </div>
+                    </a>
+                    {% else %}
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-slate-600">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <div class="hidden xl:block text-left">
+                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Account</p>
+                            <div class="text-sm font-bold text-indigo-600">
+                                <a href="{% url 'login' %}" class="hover:underline">Sign In</a> <span
+                                    class="text-slate-300">/</span> <a href="{% url 'register' %}"
+                                    class="hover:underline">Join</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center gap-5">
+                    <a href="{% url 'wishlist' %}" class="group relative">
+                        <i
+                            class="fa-regular fa-heart text-2xl text-slate-600 group-hover:text-indigo-600 transition-colors"></i>
+                        <span id="wishlist-count"
+                            class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-white {% if WISHLIST_ITEM_COUNT == 0 %}hidden{% endif %}">
+                            {{WISHLIST_ITEM_COUNT}}
+                        </span>
+                    </a>
+
+                    <a href="{% url 'cart' %}" class="group relative">
+                        <i
+                            class="fa-solid fa-bag-shopping text-2xl text-slate-600 group-hover:text-indigo-600 transition-colors"></i>
+                        <span id="cart-count"
+                            class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-white {% if CART_ITEM_COUNT == 0 %}hidden{% endif %}">
+                            {{CART_ITEM_COUNT}}
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="border-t border-slate-100 hidden lg:block">
+            <div class="flex items-center justify-between py-3 px-4 md:px-8 lg:px-12 2xl:px-[19rem]">
+                <ul class="flex items-center gap-8 text-sm font-semibold text-slate-600">
+                    <li><a href="{% url 'index' %}" class="hover:text-indigo-600 transition-colors">Home</a></li>
+                    <li><a href="{% url 'best_selling' %}" class="hover:text-indigo-600 transition-colors">Popular</a>
+                    </li>
+                    <li><a href="{% url 'shop' %}" class="hover:text-indigo-600 transition-colors">Shop</a></li>
+
+                </ul>
+
+                <a href="{% url 'best_selling' %}"
+                    class="flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-indigo-600 transition-colors">
+                    Best Selling
+                    <span
+                        class="rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm shadow-red-200">SALE</span>
+                </a>
+            </div>
         </div>
     </nav>
 
     {% block content %}
-
     {% endblock content %}
 
-    <footer class="mt-16 border-t border-zinc-200 bg-white">
-        <div class="mx-auto flex flex-col gap-10 px-[15rem] py-10 lg:flex-row lg:justify-between lg:py-12">
-            <!-- Help & Support -->
-            <div class="space-y-4 lg:w-1/3">
-                <h3 class="text-lg font-semibold text-zinc-900">Help &amp; Support</h3>
+    <footer class="mt-20 border-t border-slate-200 bg-white pt-16 pb-8">
+        <div class="mx-auto px-6 md:px-12 2xl:px-[19rem]">
 
-                <ul class="space-y-3 text-sm text-zinc-700">
-                    <li class="flex items-start gap-3">
-                        <span class="mt-0.5 text-indigo-600">
-                            <i class="fa-solid fa-location-dot"></i>
-                        </span>
-                        <span>
-                            685 Market Street, Las Vegas, LA<br />
-                            95820, United States.
-                        </span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <span class="text-indigo-600">
-                            <i class="fa-solid fa-phone"></i>
-                        </span>
-                        <span>(+099) 532-786-9843</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <span class="text-indigo-600">
-                            <i class="fa-regular fa-envelope"></i>
-                        </span>
-                        <span>support@example.com</span>
-                    </li>
-                </ul>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
 
-                <div class="flex items-center gap-4 text-lg text-zinc-800">
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                </div>
-            </div>
-
-            <!-- Account -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-semibold text-zinc-900">Account</h3>
-                <ul class="space-y-2 text-sm text-zinc-700">
-                    <li><a href="#" class="hover:text-indigo-600">Login / Register</a></li>
-                    <li><a href="#" class="hover:text-indigo-600">Cart</a></li>
-                    <li><a href="#" class="hover:text-indigo-600">Wishlist</a></li>
-                    <li><a href="#" class="hover:text-indigo-600">Shop</a></li>
-                </ul>
-            </div>
-
-            <!-- Quick Link -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-semibold text-zinc-900">Quick Link</h3>
-                <ul class="space-y-2 text-sm text-zinc-700">
-                    <li><a href="#" class="hover:text-indigo-600">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-indigo-600">Refund Policy</a></li>
-                    <li><a href="#" class="hover:text-indigo-600">Terms of Use</a></li>
-                    <li><a href="#" class="hover:text-indigo-600">FAQ's</a></li>
-                    <li><a href="#" class="hover:text-indigo-600">Contact</a></li>
-                </ul>
-            </div>
-
-            <!-- Download App -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-semibold text-zinc-900">Download App</h3>
-                <p class="text-sm text-zinc-700">Save $3 with App &amp; New User only</p>
-
-                <div class="space-y-3">
-                    <!-- App Store -->
-                    <a href="#"
-                        class="flex items-center gap-3 rounded-xl bg-zinc-900 px-4 py-3 text-left text-xs text-white">
-                        <i class="fa-brands fa-apple text-2xl"></i>
-                        <span class="leading-tight">
-                            <span class="block text-[11px] opacity-70">Download on the</span>
-                            <span class="text-sm font-semibold">App Store</span>
-                        </span>
-                    </a>
-
-                    <!-- Google Play -->
-                    <a href="#"
-                        class="flex items-center gap-3 rounded-xl bg-indigo-600 px-4 py-3 text-left text-xs text-white">
-                        <i class="fa-brands fa-google-play text-2xl"></i>
-                        <span class="leading-tight">
-                            <span class="block text-[11px] opacity-80">Get it on</span>
-                            <span class="text-sm font-semibold">Google Play</span>
-                        </span>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bottom bar -->
-        <div class="border-t border-zinc-200">
-            <div
-                class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-4 text-xs text-zinc-600 sm:flex-row">
-                <p>
-                    &copy; 2025. All rights reserved by
-                    <span class="font-semibold text-indigo-600">Pimjo.</span>
-                </p>
-
-                <div class="flex items-center gap-3">
-                    <span class="text-[11px] uppercase tracking-wide text-zinc-500">
-                        We Accept:
-                    </span>
-                    <div class="flex items-center gap-2 text-lg text-zinc-700">
-                        <i class="fa-brands fa-cc-mastercard"></i>
-                        <i class="fa-brands fa-cc-visa"></i>
-                        <i class="fa-brands fa-cc-paypal"></i>
-                        <i class="fa-brands fa-cc-amex"></i>
-                        <span class="text-[11px] font-medium">Western Union</span>
+                <div class="space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900">Help & Support</h3>
+                    <ul class="space-y-4 text-sm text-slate-500">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-location-dot mt-1 text-indigo-600"></i>
+                            <span>685 Market Street, Las Vegas, LA<br>95820, United States.</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-phone text-indigo-600"></i>
+                            <span>(+01) 850-315-9988</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-regular fa-envelope text-indigo-600"></i>
+                            <span>support@nextmerce.com</span>
+                        </li>
+                    </ul>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-slate-400 hover:text-indigo-600 transition-colors"><i
+                                class="fa-brands fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-indigo-600 transition-colors"><i
+                                class="fa-brands fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-indigo-600 transition-colors"><i
+                                class="fa-brands fa-instagram text-xl"></i></a>
                     </div>
                 </div>
+
+                <div class="space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900">Account</h3>
+                    <ul class="space-y-3 text-sm text-slate-500 font-medium">
+                        <li><a href="{% url 'customer_dashboard' %}" class="hover:text-indigo-600 transition-colors">My
+                                Profile</a></li>
+                        <li><a href="{% url 'customer_orders' %}" class="hover:text-indigo-600 transition-colors">Order
+                                History</a></li>
+                        <li><a href="{% url 'wishlist' %}" class="hover:text-indigo-600 transition-colors">My
+                                Wishlist</a>
+                        </li>
+                        <li><a href="{% url 'cart' %}" class="hover:text-indigo-600 transition-colors">View Cart</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900">Quick Links</h3>
+                    <ul class="space-y-3 text-sm text-slate-500 font-medium">
+                        <li><a href="{% url 'about' %}" class="hover:text-indigo-600 transition-colors">About Us</a>
+                        </li>
+                        <li><a href="{% url 'policy' %}" class="hover:text-indigo-600 transition-colors">Privacy
+                                Policy</a>
+                        </li>
+                        <li><a href="{% url 'faq' %}" class="hover:text-indigo-600 transition-colors">FAQ's</a></li>
+                        <li><a href="{% url 'contact' %}" class="hover:text-indigo-600 transition-colors">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900">Download App</h3>
+                    <p class="text-sm text-slate-500">Save $3 with App & New User only</p>
+                    <div class="flex flex-col gap-3">
+                        <a href="#"
+                            class="flex items-center gap-3 rounded-xl bg-slate-900 px-4 py-2.5 text-white hover:bg-slate-800 transition-all">
+                            <i class="fa-brands fa-apple text-2xl"></i>
+                            <div>
+                                <span class="block text-[10px] opacity-70">Download on the</span>
+                                <span class="font-bold text-sm">App Store</span>
+                            </div>
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-3 rounded-xl bg-indigo-600 px-4 py-2.5 text-white hover:bg-indigo-700 transition-all">
+                            <i class="fa-brands fa-google-play text-xl"></i>
+                            <div>
+                                <span class="block text-[10px] opacity-80">Get it on</span>
+                                <span class="font-bold text-sm">Google Play</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
             </div>
+
+            <p class="text-xs text-slate-500 text-center">&copy; 2025 NextMerce. All rights reserved.</p>
         </div>
     </footer>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll(".qty-picker").forEach((picker) => {
-                const stockRaw = parseInt(picker.dataset.stock || "1", 10);
-                const qtyRaw = parseInt(picker.dataset.qty || "1", 10);
+    <div id="mobile-menu-drawer"
+        class="fixed top-0 right-0 z-50 h-screen p-0 overflow-y-auto transition-transform translate-x-full bg-white w-80 shadow-2xl"
+        tabindex="-1" aria-labelledby="drawer-right-label">
 
-                const stock = Number.isFinite(stockRaw) ? Math.max(1, stockRaw) : 1;
-                let qty = Number.isFinite(qtyRaw) ? Math.max(1, qtyRaw) : 1;
+        <div class="flex items-center justify-between p-5 border-b border-gray-100">
+            <a href="{% url 'index' %}" class="flex items-center gap-2">
+                <div
+                    class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+                    N</div>
+                <span class="text-xl font-bold text-slate-900">NextMerce</span>
+            </a>
+            <button type="button" data-drawer-hide="mobile-menu-drawer" aria-controls="mobile-menu-drawer"
+                class="text-slate-400 bg-transparent hover:bg-gray-100 hover:text-slate-900 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+                <span class="sr-only">Close menu</span>
+            </button>
+        </div>
 
-                // money-safe: work in cents
-                const unitStr = (picker.dataset.unitPrice || "0").replace(/,/g, "");
-                const unitCents = Math.round(parseFloat(unitStr) * 100) || 0;
+        <div class="flex flex-col h-[calc(100vh-80px)] justify-between">
 
-                const row = picker.closest(".grid"); // your row container
-                const subtotalEl = row.querySelector("[data-subtotal]");
+            <div class="p-5 space-y-1">
 
-                const decBtn = picker.querySelector('[data-action="dec"]');
-                const incBtn = picker.querySelector('[data-action="inc"]');
-                const qtyEl = picker.querySelector("[data-qty-display]");
-                const qtyInput = picker.querySelector("[data-qty-input]");
+                <a href="{% url 'best_selling' %}"
+                    class="block py-3 px-2 text-base font-semibold text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    Popular
+                </a>
 
-                function money(cents) {
-                    return `$${(cents / 100).toFixed(2)}`;
-                }
+                <a href="{% url 'shop' %}"
+                    class="block py-3 px-2 text-base font-semibold text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    Shop
+                </a>
 
-                function render() {
-                    qty = Math.min(stock, Math.max(1, qty));
+                <a href="{% url 'contact' %}"
+                    class="block py-3 px-2 text-base font-semibold text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    Contact
+                </a>
 
-                    qtyEl.textContent = qty;
-                    if (qtyInput) qtyInput.value = String(qty);
+            </div>
 
-                    decBtn.disabled = qty <= 1;
-                    incBtn.disabled = qty >= stock;
+            <div class="p-5 border-t border-gray-100 bg-slate-50/50">
+                <div>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'customer_dashboard' %}" class="group flex items-center gap-3">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-slate-600 group-hover:bg-indigo-50 group-hover:text-indigo-600 group-hover:border-indigo-100 transition-all">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
 
-                    // ✅ update subtotal UI
-                    const subtotalCents = unitCents * qty;
-                    if (subtotalEl) subtotalEl.textContent = money(subtotalCents);
-                }
+                        <div class="text-left">
+                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Account</p>
+                            <p class="text-sm font-bold text-black truncate max-w-[150px]">{{user.username}}</p>
+                        </div>
+                    </a>
+                    {% else %}
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-slate-600">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
 
-                decBtn.addEventListener("click", () => { qty -= 1; render(); });
-                incBtn.addEventListener("click", () => { qty += 1; render(); });
+                        <div class="text-left">
+                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Account</p>
+                            <div class="text-sm font-bold text-indigo-600">
+                                <a href="{% url 'login' %}" class="hover:underline">Sign In</a>
+                                <span class="text-slate-300">/</span>
+                                <a href="{% url 'register' %}" class="hover:underline">Join</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-100">
+                    <a href="{% url 'logout' %}"
+                        class="group flex items-center gap-3 rounded-xl px-4 py-3 text-red-600 hover:bg-red-50 hover:text-red-600 transition-all">
+                        <i
+                            class="fa-solid fa-right-from-bracket w-5 text-red-600 group-hover:text-red-500 transition-colors"></i>
+                        <span class="font-medium text-sm">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                render();
-            });
-        });
-    </script>
+    {% if messages %}
+    <div class="fixed top-24 right-5 z-[9999] space-y-2">
+        {% for message in messages %}
+        <div id="toast-{{ forloop.counter }}"
+            class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow-lg border border-slate-100 dark:text-gray-400 dark:bg-gray-800"
+            role="alert">
+            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg 
+                {% if message.tags == 'success' %} text-green-500 bg-green-100
+                {% elif message.tags == 'error' %} text-red-500 bg-red-100
+                {% elif message.tags == 'warning' %} text-orange-500 bg-orange-100
+                {% else %} text-blue-500 bg-blue-100 {% endif %}">
+
+                {% if message.tags == 'success' %} <i class="fa-solid fa-check"></i>
+                {% elif message.tags == 'error' %} <i class="fa-solid fa-xmark"></i>
+                {% else %} <i class="fa-solid fa-info"></i> {% endif %}
+            </div>
+            <div class="ml-3 text-sm font-normal">{{ message }}</div>
+            <button type="button"
+                class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+                data-dismiss-target="#toast-{{ forloop.counter }}" aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js"></script>
 </body>
-{% if messages %}
-<div class="fixed top-5 right-5 z-[9999] space-y-3">
-    {% for message in messages %}
-    <div class="rounded-xl px-4 py-3 shadow-lg
-                  {% if message.tags == 'success' %} bg-emerald-600 text-white {% endif %}
-                  {% if message.tags == 'error' %} bg-red-600 text-white {% endif %}
-                  {% if message.tags == 'warning' %} bg-amber-500 text-white {% endif %}
-                  {% if message.tags == 'info' %} bg-slate-900 text-white {% endif %}">
-        {{ message }}
-    </div>
-    {% endfor %}
-</div>
-{% endif %}
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- 1. Toast Configuration ---
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        async function postForm(url, formData) {
+            const res = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                body: formData,
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw data;
+            return data;
+        }
+
+        document.addEventListener("click", async (e) => {
+
+            // --- ADD TO CART ---
+            const cartBtn = e.target.closest(".js-add-cart");
+            if (cartBtn) {
+                if (cartBtn.disabled) return;
+                const url = cartBtn.dataset.url;
+                const qtyInput = document.querySelector("#qty-input");
+                const qty = qtyInput ? qtyInput.value : 1;
+                const fd = new FormData();
+                fd.append("qty", qty);
+                cartBtn.disabled = true;
+
+                try {
+                    const data = await postForm(url, fd);
+                    const cartCountEl = document.querySelector("#cart-count");
+                    if (cartCountEl && data.cartCount !== undefined) {
+                        cartCountEl.textContent = data.cartCount;
+                        cartCountEl.classList.remove("hidden");
+                    }
+
+                    // PRETTY ALERT
+                    Toast.fire({
+                        icon: 'success',
+                        title: data.message || 'Added to cart'
+                    });
+
+                } catch (err) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: err.message || 'Error adding to cart'
+                    });
+                } finally {
+                    cartBtn.disabled = false;
+                }
+                return;
+            }
+
+            // --- WISHLIST TOGGLE ---
+            const wishBtn = e.target.closest(".js-wishlist");
+            if (wishBtn) {
+                if (wishBtn.disabled) return;
+                const url = wishBtn.dataset.url;
+                wishBtn.disabled = true;
+
+                try {
+                    const data = await postForm(url, new FormData());
+
+                    if (data.inWishlist) {
+                        wishBtn.classList.add("text-red-500");
+                    } else {
+                        wishBtn.classList.remove("text-red-500");
+                    }
+
+                    const wishCountEl = document.querySelector("#wishlist-count");
+                    if (wishCountEl && data.wishlistCount !== undefined) {
+                        wishCountEl.textContent = data.wishlistCount;
+                        if (data.wishlistCount > 0) {
+                            wishCountEl.classList.remove("hidden");
+                        } else {
+                            wishCountEl.classList.add("hidden");
+                        }
+                    }
+
+                    // PRETTY ALERT
+                    Toast.fire({
+                        icon: 'success',
+                        title: data.message
+                    });
+
+                } catch (err) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Failed to update wishlist'
+                    });
+                } finally {
+                    wishBtn.disabled = false;
+                }
+            }
+        });
+    });
+</script>
+
+
 
 </html>

@@ -1,0 +1,158 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="sticky top-0 z-30 bg-white border-b border-gray-200 lg:hidden overflow-x-auto no-scrollbar">
+    <div class="flex items-center gap-8 px-6">
+
+        <a href="{% url 'customer_dashboard' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_dashboard' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Dashboard
+            {% if request.resolver_match.url_name == 'customer_dashboard' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+        <a href="{% url 'customer_orders' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_orders' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Orders
+            {% if request.resolver_match.url_name == 'customer_orders' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+        <a href="{% url 'customer_wishlist' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_wishlist' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Wishlist
+            {% if request.resolver_match.url_name == 'customer_wishlist' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+        <a href="{% url 'customer_settings' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_settings' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Settings
+            {% if request.resolver_match.url_name == 'customer_settings' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+        <a href="{% url 'customer_reviews' %}"
+            class="relative py-4 text-sm whitespace-nowrap transition-colors
+            {% if request.resolver_match.url_name == 'customer_reviews' %} font-bold text-indigo-600 {% else %} font-medium text-slate-500 hover:text-indigo-600 {% endif %}">
+            Pending Reviews
+            {% if request.resolver_match.url_name == 'customer_reviews' %}
+            <span class="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></span>
+            {% endif %}
+        </a>
+
+    </div>
+</div>
+
+<style>
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+
+<div
+    class="bg-white border-b border-gray-200 py-8 flex lg:flex-row flex-col lg:gap-0 gap-2  items-center justify-between px-4 lg:px-[12rem] xl:px-[19rem]">
+    <h1 class="font-bold text-3xl text-slate-900">My Wishlist</h1>
+    <div class="text-sm font-medium">
+        <a href="{% url 'index' %}" class="text-slate-500 hover:text-blue-600 transition-colors">Home /</a>
+        <a href="{% url 'customer_dashboard' %}" class="text-slate-500 hover:text-blue-600 transition-colors">Account
+            /</a>
+        <span class="text-blue-600">Wishlist</span>
+    </div>
+</div>
+
+<section class="bg-[#F9FAFB] py-10 px-4 lg:px-[12rem] xl:px-[19rem]">
+
+    <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
+
+        <aside class="hidden lg:block sticky top-32 self-start h-fit">
+            {% include 'customer/includes/sidebar.html' %}
+        </aside>
+
+        <div class="space-y-6">
+
+            <div class="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                <h2 class="font-bold text-xl text-slate-900">
+                    Saved Items <span class="text-slate-400 text-sm font-medium ml-1">({{ wishlist.count }})</span>
+                </h2>
+            </div>
+
+            {% if wishlist %}
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+
+                {% for w in wishlist %}
+                <div
+                    class="group relative rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-indigo-100">
+
+                    <div class="absolute right-4 top-4 z-10">
+                        <a href="{% url 'customer_wishlist_delete' w.id %}">
+                            <button type="button"
+                                class="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-slate-100 text-slate-400 shadow-sm transition-colors hover:bg-red-50 hover:border-red-100 hover:text-red-500"
+                                title="Remove from wishlist">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </a>
+                    </div>
+
+                    <div
+                        class="relative mb-4 flex h-48 w-full items-center justify-center overflow-hidden rounded-xl bg-slate-50">
+                        <img src="{{w.product.image.url}}" alt="{{w.product.name}}"
+                            class="h-32 w-auto object-contain transition-transform duration-500 group-hover:scale-110" />
+                    </div>
+
+                    <div class="space-y-2 text-center">
+                        <h3 class="text-sm font-bold text-slate-900 line-clamp-2 min-h-[40px]">
+                            {{w.product.name}}
+                        </h3>
+
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="text-lg font-bold text-indigo-600">{{w.product.sale_price}}</span>
+                            {% if w.product.regular_price %}
+                            <span class="text-xs text-slate-400 line-through">{{w.product.regular_price}}</span>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div
+                class="flex flex-col items-center justify-center rounded-2xl border border-slate-100 bg-white py-16 px-4 text-center shadow-sm">
+                <div class="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                    <i class="fa-regular fa-heart text-slate-300 text-3xl"></i>
+                </div>
+                <h3 class="text-slate-900 font-bold text-lg mb-2">Your wishlist is empty</h3>
+                <p class="text-slate-500 max-w-sm mx-auto mb-8">Seems like you haven't saved any items yet. Browse our
+                    store and find something you love.</p>
+                <a href="{% url 'index' %}"
+                    class="rounded-full bg-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all transform hover:-translate-y-0.5">
+                    Start Shopping
+                </a>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</section>
+{% endblock content %}

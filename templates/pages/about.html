@@ -1,0 +1,41 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="px-4 md:px-8 lg:px-12 2xl:px-[19rem] py-16">
+
+    <div class="text-center max-w-3xl mx-auto mb-16">
+        <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mb-6">We are NextMerce</h1>
+        <p class="text-lg text-slate-600 leading-relaxed">
+            We believe in delivering quality products with an exceptional shopping experience.
+            Started in 2020, we have grown from a small garage startup to a global e-commerce platform.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
+        <div class="rounded-2xl overflow-hidden shadow-sm h-[400px]">
+            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80"
+                alt="Our Team" class="w-full h-full object-cover">
+        </div>
+        <div class="space-y-6">
+            <h2 class="text-2xl font-bold text-slate-900">Our Mission</h2>
+            <p class="text-slate-600 leading-relaxed">
+                To provide accessible, high-quality products to everyone, everywhere. We focus on sustainability,
+                customer satisfaction, and innovative solutions that make your life easier.
+            </p>
+
+            <div class="grid grid-cols-2 gap-6 pt-4">
+                <div>
+                    <h3 class="text-3xl font-bold text-indigo-600">50k+</h3>
+                    <p class="text-sm text-slate-500">Happy Customers</p>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-bold text-indigo-600">100+</h3>
+                    <p class="text-sm text-slate-500">Top Brands</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock content %}

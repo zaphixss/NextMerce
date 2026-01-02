@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Reviews | NextMerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    screens: {
+                        '2xl': '1536px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-padding {
+                padding: 1.25rem !important;
+            }
+
+            .mobile-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+
+            .mobile-rating-box {
+                width: 100% !important;
+                justify-content: space-between !important;
+                margin-top: 1rem;
+            }
+
+            .mobile-form-stack {
+                flex-direction: column !important;
+            }
+
+            .mobile-send-btn {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#F8F9FC] h-screen flex overflow-hidden font-['Plus_Jakarta_Sans']">
+
+    <aside class="w-64 bg-white border-r border-slate-200 hidden lg:block flex-shrink-0 z-20">
+        {% include 'vendor/includes/vendor.sidebar.html' %}
+    </aside>
+
+    <div id="drawer-navigation"
+        class="fixed top-0 left-0 z-40 h-screen p-2  transition-transform -translate-x-full bg-white w-fit " tabindex="-1"
+        aria-labelledby="drawer-navigation-label">
+        <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div>
+            {% include 'vendor/includes/vendor.sidebar.html' %}
+        </div>
+    </div>
+
+
+    <main class="flex-1 px-4 lg:px-[4%] 2xl:px-[8%] p-8 overflow-y-auto h-full mobile-padding">
+
+        {% if messages %}
+        {% for message in messages %}
+        <div
+            class="mb-6 p-4 rounded-2xl {% if message.tags == 'success' %}bg-emerald-50 text-emerald-700 border border-emerald-100{% else %}bg-amber-50 text-amber-700 border border-amber-100{% endif %} flex items-center gap-3 animate-bounce">
+            <i
+                class="fa-solid {% if message.tags == 'success' %}fa-circle-check{% else %}fa-circle-exclamation{% endif %}"></i>
+            <p class="text-xs font-bold uppercase tracking-widest">{{ message }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <header class="flex flex-col md:flex-row md:items-center justify-between mb-10 mobile-header">
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <div>
+                    <h1 class="text-3xl font-black text-slate-900 tracking-tight">Reviews</h1>
+                    <p class="text-slate-500 text-sm mt-1">Manage customer feedback and build your reputation.</p>
+                </div>
+                <button class="lg:hidden p-2.5 text-slate-600 bg-white border border-slate-200 rounded-xl shadow-sm"
+                    type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation">
+                    <i class="fa-solid fa-bars-staggered text-xl"></i>
+                </button>
+            </div>
+
+            <div
+                class="bg-white px-4 py-2.5 rounded-2xl border border-slate-200 flex items-center gap-3 mobile-rating-box shadow-sm">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Avg. Rating</span>
+                <div class="flex items-center gap-1.5 text-amber-500">
+                    <i class="fa-solid fa-star"></i>
+                    <span class="text-slate-900 font-black">{{ average_rating }}</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="space-y-6 mb-12">
+            {% for r in reviews %}
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6 md:p-8">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="h-10 w-10 md:h-12 md:w-12 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm md:text-base">{{ r.user.username|title }}</h4>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{{ r.date|date:"d, M, Y" }}</p>
+                                
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 text-amber-400 text-xs font-bold">
+                        <i class="fa-solid fa-star"></i> {{ r.rating }} / 5
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-1">Product</p>
+                    <h5 class="text-sm font-bold text-slate-700 underline underline-offset-4 decoration-slate-200">
+                        {{ r.product.name }}
+                    </h5>
+                    <p class="mt-4 text-slate-600 leading-relaxed italic text-sm">"{{ r.review }}"</p>
+                </div>
+
+                <div class="pt-6 border-t border-slate-50">
+                    {% if r.reply %}
+                    <div class="bg-slate-50 p-5 md:p-6 rounded-2xl relative">
+                        <span
+                            class="absolute -top-3 left-6 px-3 py-1 bg-white border border-slate-100 rounded-full text-[9px] font-black uppercase tracking-widest text-slate-400 shadow-sm">Your
+                            Reply</span>
+                        <p class="text-sm text-slate-600 font-medium">{{ r.reply }}</p>
+                    </div>
+                    {% else %}
+                    <form method="POST" class="space-y-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="review_id" value="{{ r.id }}">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Write a
+                            response</label>
+                        <div class="flex flex-col md:flex-row gap-3 mobile-form-stack">
+                            <textarea name="reply" placeholder="Thank the customer or address their concern..."
+                                class="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all min-h-[100px] md:min-h-0"></textarea>
+                            <button type="submit"
+                                class="md:self-end px-6 py-4 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-lg shadow-slate-200 flex items-center justify-center mobile-send-btn">
+                                <i class="fa-solid fa-paper-plane md:mr-0"></i>
+                                <span class="md:hidden ml-2">Send Reply</span>
+                            </button>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            {% include 'vendor/includes/empty_state.html' with message="You haven't received any reviews yet." %}
+            {% endfor %}
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+</body>
+
+</html>
