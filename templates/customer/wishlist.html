@@ -115,7 +115,7 @@
                             class="h-32 w-auto object-contain transition-transform duration-500 group-hover:scale-110" />
                     </div>
 
-                    <div class="space-y-2 text-center">
+                    <a class="space-y-2 text-center" href="{% url 'product_detail' w.product.slug%}">
                         <h3 class="text-sm font-bold text-slate-900 line-clamp-2 min-h-[40px]">
                             {{w.product.name}}
                         </h3>
@@ -127,7 +127,7 @@
                             {% endif %}
                         </div>
 
-                    </div>
+                    </a>
                 </div>
                 {% endfor %}
 

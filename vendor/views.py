@@ -284,9 +284,15 @@ def vendor_orders(request):
     return render(request, 'vendor/orders.html', context)
 
 def vendor_order_delete(request, id):
-    order =  Order.objects.get(id=id)
+    order = Order.objects.get(id=id)
+    
     order.delete()
-    return redirect('vendor_orders')
+    
+    messages.success(request, "Order deleted successfully!")
+    
+    previous_url = request.META.get('HTTP_REFERER' )
+    
+    return redirect(previous_url)
 
 @login_required
 def vendor_order_detail(request, id):

@@ -25,6 +25,8 @@ def index(request):
     banner2 = Product.objects.filter(banner="Banner 2").first() 
     banner3 = Product.objects.filter(banner="Banner 3").first()
     banner4 = Product.objects.filter(banner="Banner 4").first()
+    banner5 = Product.objects.filter(banner="Banner 5").first()
+    banner6 = Product.objects.filter(banner="Banner 6").first()
     context ={
         'categories':categories,
         'products':products,
@@ -35,6 +37,9 @@ def index(request):
         'banner2':banner2,
         'banner3':banner3,
         'banner4':banner4,
+        'banner5':banner5,
+        'banner6':banner6,
+
     }
     return render(request, 'index.html', context)
 
@@ -238,6 +243,7 @@ def create_checkout_view(request):
     address = request.POST.get('address')
     city = request.POST.get('city')
     state = request.POST.get('state')
+    country = request.POST.get('country')
 
     if not all([fullname, mobile, address, city, state]):
         messages.warning(request, "All bio data is required")
@@ -249,7 +255,8 @@ def create_checkout_view(request):
         mobile = mobile,
         address = address,
         city = city,
-        state = state
+        state = state,
+        country = country
     )
 
     for each_item in carts:

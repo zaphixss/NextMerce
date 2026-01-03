@@ -75,28 +75,27 @@
                     class="group relative bg-white rounded-2xl border border-slate-100 p-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
 
                     <div class="relative w-full h-48 bg-[#f5f7fb] rounded-xl overflow-hidden mb-4 p-4 flex items-center justify-center cursor-pointer"
-                        onclick='window.location.href="{% url "product_detail" p.slug %}"'>
+                        >
                         <img src="{{ p.image.url }}" alt="{{ p.name }}"
                             class="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500" />
 
-                        <div
+                        <div 
                             class="absolute bottom-3 flex gap-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                            <a href="{% url 'add_cart' p.id %}">
-                                <button
-                                    class="h-9 w-9 rounded-full bg-white text-slate-900 shadow-md flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-colors">
-                                    <i class="fa-solid fa-cart-plus text-sm"></i>
-                                </button>
-                            </a>
-                            <a href="{% url 'add_wishlist' p.id %}">
-                                <button
-                                    class="h-9 w-9 rounded-full bg-white text-slate-900 shadow-md flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors">
-                                    <i class="fa-regular fa-heart text-sm"></i>
-                                </button>
-                            </a>
+                            <button type="button"
+                                class="js-add-cart flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-blue-600 hover:text-white transition-colors"
+                                data-url="{% url 'add_cart' p.id %}">
+                                <i class="fa-solid fa-cart-shopping text-sm"></i>
+                            </button>
+                            
+                            <button type="button"
+                                class="js-wishlist flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-red-500 hover:text-white transition-colors"
+                                data-url="{% url 'add_wishlist' p.id %}">
+                                <i class="fa-regular fa-heart text-sm"></i>
+                            </button>   
                         </div>
                     </div>
 
-                    <div>
+                    <div onclick='window.location.href="{% url "product_detail" p.slug %}"'>
                         <h3 class="font-bold text-sm text-slate-900 line-clamp-1 mb-1">
                             <a href="{% url 'product_detail' p.slug %}"
                                 class="hover:text-indigo-600 transition-colors">{{ p.name }}</a>

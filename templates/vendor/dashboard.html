@@ -60,7 +60,7 @@
     </div>
 
     <main class="flex-1 px-4 lg:px-[5%] 2xl:px-[12%] p-8 pt-[2rem] overflow-y-auto h-full mobile-padding">
-
+            {% load humanize %}
         <header class="flex flex-col min-[769px]:flex-row min-[769px]:items-center justify-between mb-8 gap-4">
             <div class="flex items-center justify-between w-full min-[769px]:w-auto">
                 <div>
@@ -177,7 +177,9 @@
                     <tbody class="divide-y divide-slate-100">
                         {% for order in orders %}
                         <tr class="hover:bg-slate-50 transition-colors group">
-                            <td class="px-6 py-4 font-bold text-indigo-600">#ORD-{{order.id}}</td>
+                            <td class="px-6 py-4 font-bold text-indigo-600">
+                                <a href="{% url 'order_detail' order.id %}">#ORD-{{order.id}}</a>
+                               </td>
                             <td class="px-6 py-4 text-slate-500">{{order.date}}</td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-2">
@@ -207,10 +209,7 @@
                                 <a href="{% url 'vendor_order_delete' order.id %}" class="text-red-400 hover:text-blue-500 transition-colors">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>
-                                <a href="{% url 'order_detail' order.id %}"
-                                    class="text-blue-400 hover:text-blue-500 transition-colors">
-                                    <i class="fa-regular fa-eye"></i>
-                                </a>
+                                
                                 
                             </td>
                         </tr>

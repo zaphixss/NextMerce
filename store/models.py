@@ -17,6 +17,8 @@ class Product(models.Model):
         ("Banner 2", "Banner 2"),
         ("Banner 3", "Banner 3"),
         ("Banner 4", "Banner 4"),
+        ("Banner 5", "Banner 5"),
+        ("Banner 6", "Banner 6"),
     )
     status = models.CharField(max_length=500, choices=STATUS, default="Published")
     user = models.ForeignKey(userauth_model.User, on_delete=models.SET_NULL, null=True)
@@ -103,6 +105,7 @@ class Order(models.Model):
     city = models.CharField(max_length=100, default='Unknown City')
     address = models.CharField(max_length=100, null=True, blank=True)
     state = models.CharField(max_length=100, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
     total = models.DecimalField(default=0, decimal_places=2, max_digits=12, null=True, blank=True)
     payment_status = models.CharField(max_length=50, choices=STATUS, default="Pending")
     date = models.DateTimeField(default=timezone.now, null=True, blank=True)
