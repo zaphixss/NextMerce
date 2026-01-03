@@ -6,6 +6,8 @@ from django.db.models.functions import TruncMonth
 import json
 from django.contrib import messages
 from django.utils.text import slugify
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 @login_required
 def vendor_dashboard(request):
@@ -92,40 +94,74 @@ def vendor_dashboard(request):
     }
     return render(request, 'vendor/dashboard.html', context)
 
-
-
 @login_required
 def vendor_product_list(request):
-    products = Product.objects.filter(user=request.user)
+    all_products = Product.objects.filter(user=request.user).order_by("-id")
     
-    published_products = products.filter(status="Published")
-    draft_products = products.filter(status="Draft")
-    disabled_products = products.filter(status="Disabled")
-    average_price = products.aggregate(avg_price=Avg('sale_price'))['avg_price'] or 0
+    pub_list = all_products.filter(status="Published")
+    draft_list = all_products.filter(status="Draft")
+    dis_list = all_products.filter(status="Disabled")
+    
+   
+    pub_paginator = Paginator(pub_list, 8)
+    draft_paginator = Paginator(draft_list, 8)
+    dis_paginator = Paginator(dis_list, 8)
+
+    published_products = pub_paginator.get_page(request.GET.get('pub_page'))
+    draft_products = draft_paginator.get_page(request.GET.get('draft_page'))
+    disabled_products = dis_paginator.get_page(request.GET.get('dis_page'))
+
+    average_price = all_products.aggregate(avg_price=Avg('sale_price'))['avg_price'] or 0
+    formatted_avg = "{:,.0f}".format(round(average_price))
     context = {
-        'products': products, # kept for total counts
+        'products': all_products,
         'published_products': published_products,
         'draft_products': draft_products,
         'disabled_products': disabled_products,
-        'average_price': average_price,
+        'average_price': formatted_avg,
+        'pub_list': pub_list,
+        'draft_list': draft_list,
+        'dis_list': dis_list,
     }
     return render(request, 'vendor/product_list.html', context)
 
+def ajax_check_product_name(request):
+    name = request.GET.get('name', None)
+    exists = Product.objects.filter(user=request.user, name__iexact=name).exists()
+    return JsonResponse({'exists': exists})
+
 @login_required
 def vendor_create_product(request):
+    categories = Category.objects.all()
+    status_choices = Product.STATUS 
+
     if request.method == "POST":
         name = request.POST.get('name')
         description = request.POST.get('description')
+        additional_info = request.POST.get('additional_info')
         regular_price = request.POST.get('regular_price') 
         sale_price = request.POST.get('sale_price') 
         qty = request.POST.get('qty') 
         status = request.POST.get('status') 
         category_id = request.POST.get('category')
-        in_stock = 'in_stock' in request.POST
-        featured = 'featured' in request.POST
+        
+        # Booleans
         free_delivery = 'free_delivery' in request.POST
+        in_stock = 'in_stock' in request.POST
+        new_arrivals = 'new_arrivals' in request.POST
+        
+        # Files
         image = request.FILES.get('image')
         cover_image = request.FILES.get('cover_image')
+        
+        
+        if not image:
+            messages.error(request, "Please add a product image before publishing!")
+            return render(request, 'vendor/add_product.html', {
+                "categories": categories,
+                "status": status_choices
+            })
+
         category = Category.objects.get(id=category_id) if category_id else None
 
         new_product = Product.objects.create(
@@ -134,47 +170,50 @@ def vendor_create_product(request):
             name=name,
             slug=slugify(name),               
             description=description,
+            additional_information=additional_info,
             regular_price=regular_price,
             sale_price=sale_price,
             qty=qty,
             status=status,
             in_stock=in_stock,
-            featured=featured,
             free_delivery=free_delivery,
             image=image,                      
-            cover_image=cover_image                       
+            cover_image=cover_image,   
+            new_arrivals=new_arrivals,
         )
 
-      
         messages.success(request, f"Product '{name}' created successfully!")
-        
         return redirect('vendor_product_list')
 
-    categories = Category.objects.all()
-
     context = {
-        "categories": categories
+        "categories": categories,
+        "status": status_choices 
     }
     
     return render(request, "vendor/add_product.html", context)
 
-
 @login_required
 def vendor_edit_product(request, id):
     product = Product.objects.get(id=id, user=request.user)
-    categories = Category.objects.all() 
+    categories = Category.objects.all()
+    status_choices = Product.STATUS # Match status choices from Create View
+
     if request.method == "POST":
         name = request.POST.get('name')
         description = request.POST.get('description')
+        additional_info = request.POST.get('additional_info') # Added
+        
         regular_price = request.POST.get('regular_price') 
         sale_price = request.POST.get('sale_price') 
         qty = request.POST.get('qty') 
+        
         status = request.POST.get('status') 
         category_id = request.POST.get('category')
         
+        
         in_stock = 'in_stock' in request.POST
-        featured = 'featured' in request.POST
         free_delivery = 'free_delivery' in request.POST
+        new_arrivals = 'new_arrivals' in request.POST 
         
         image = request.FILES.get('image')
         if image:
@@ -184,30 +223,32 @@ def vendor_edit_product(request, id):
         if cover_image:
             product.cover_image = cover_image
 
-        # Update the object
         product.name = name
         product.slug = slugify(name)
         product.description = description
+        product.additional_information = additional_info 
         product.regular_price = regular_price
         product.sale_price = sale_price
         product.qty = qty
         product.status = status
         product.in_stock = in_stock
-        product.featured = featured
         product.free_delivery = free_delivery
+        product.new_arrivals = new_arrivals 
         
-        # Update Category if provided
         if category_id:
             product.category = Category.objects.get(id=category_id)
 
         product.save()
         messages.success(request, f"Updated {product.name} successfully!")
         return redirect("vendor_product_list")
+
     context = {
         "product": product,
         "categories": categories,
+        "status": status_choices, # Pass status choices for the dropdown loop
     }
     return render(request, "vendor/edit_product.html", context)
+
 
 def product_delete(request, id):
     product = Product.objects.get(id=id, user=request.user)
@@ -217,7 +258,6 @@ def product_delete(request, id):
 
 @login_required
 def vendor_orders(request):
-    # Fetch orders containing items belonging to this vendor, ordered by newest first
     orders = (
         Order.objects
         .filter(orderitem__product__user=request.user)
@@ -243,13 +283,16 @@ def vendor_orders(request):
     }
     return render(request, 'vendor/orders.html', context)
 
+def vendor_order_delete(request, id):
+    order =  Order.objects.get(id=id)
+    order.delete()
+    return redirect('vendor_orders')
 
 @login_required
 def vendor_order_detail(request, id):
     order = Order.objects.get(id=id)
     order_items = OrderItem.objects.filter(order=order, product__user=request.user)
     
-    # You must define the variable here before using it below
     vendor_order_total = order_items.aggregate(total=Sum('sub_total'))['total'] or 0
 
     context = {

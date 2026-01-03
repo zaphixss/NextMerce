@@ -160,11 +160,15 @@
                                             {{ order.payment_status }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-right">
+                                    <td class="px-6 py-4 text-right  space-x-4">
+                                        <a href="{% url 'customer_order_detail' order.id %}" class="text-blue-400 hover:text-blue-500 transition-colors">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </a>
                                         <a href="{% url 'order_delete' order.id %}"
                                             class="text-slate-400 hover:text-red-500 transition-colors">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </a>
+                                        
                                     </td>
                                 </tr>
                                 {% endfor %}

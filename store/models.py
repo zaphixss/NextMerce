@@ -12,6 +12,12 @@ class Product(models.Model):
         ("Disabled", "Disabled"),
     )
 
+    BANNERS = (
+        ("Banner 1", "Banner 1"),
+        ("Banner 2", "Banner 2"),
+        ("Banner 3", "Banner 3"),
+        ("Banner 4", "Banner 4"),
+    )
     status = models.CharField(max_length=500, choices=STATUS, default="Published")
     user = models.ForeignKey(userauth_model.User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey("store.Category",on_delete=models.SET_NULL, null=True)
@@ -30,7 +36,7 @@ class Product(models.Model):
     cover_image = models.ImageField(upload_to='image', null=True, blank=True)
     best_selling = models.BooleanField(default=False)
     new_arrivals = models.BooleanField(default=False)
-
+    banner = models.CharField(max_length=50, choices=BANNERS, blank=True, null=True)
 
     def __str__(self):
         return self.name

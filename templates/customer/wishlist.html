@@ -121,9 +121,9 @@
                         </h3>
 
                         <div class="flex items-center justify-center gap-2">
-                            <span class="text-lg font-bold text-indigo-600">{{w.product.sale_price}}</span>
+                            <span class="text-lg font-bold text-indigo-600">${{w.product.sale_price}}</span>
                             {% if w.product.regular_price %}
-                            <span class="text-xs text-slate-400 line-through">{{w.product.regular_price}}</span>
+                            <span class="text-xs text-slate-400 line-through">${{w.product.regular_price}}</span>
                             {% endif %}
                         </div>
 

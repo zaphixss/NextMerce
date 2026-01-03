@@ -131,7 +131,7 @@
                                 </span>
                             </td>
                             <td class="px-8 py-5">
-                                <p class="font-semibold text-sm">#ORD-{{ c.order__id}}</p>
+                                <a href="{% url 'order_detail' c.order__id %}" class="font-semibold text-sm hover:text-blue-500">#ORD-{{ c.order__id}}</a>
                             </td>
                             <td class="px-8 py-5">
                                 <p class="text-sm font-black text-slate-900">{{ c.total_items }} Items</p>

@@ -21,13 +21,20 @@ def index(request):
     featured_products = Product.objects.filter(featured=True)
     best_selling = Product.objects.filter(best_selling=True)
     new_arrivals = Product.objects.filter(new_arrivals=True)
-
+    banner1 = Product.objects.filter(banner="Banner 1").first()
+    banner2 = Product.objects.filter(banner="Banner 2").first() 
+    banner3 = Product.objects.filter(banner="Banner 3").first()
+    banner4 = Product.objects.filter(banner="Banner 4").first()
     context ={
         'categories':categories,
         'products':products,
         'featured_products':featured_products,
         'best_selling':best_selling,
-        'new_arrivals':new_arrivals
+        'new_arrivals':new_arrivals,
+        'banner1':banner1,
+        'banner2':banner2,
+        'banner3':banner3,
+        'banner4':banner4,
     }
     return render(request, 'index.html', context)
 
