@@ -55,7 +55,7 @@
                     <a href="{% url 'wishlist' %}" class="relative text-slate-600">
                         <i class="fa-regular fa-heart text-xl"></i>
                         {% if WISHLIST_ITEM_COUNT > 0 %}
-                        <span id="wishlis-count"
+                        <span id="wishlist-count"
                             class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white">
                             {{WISHLIST_ITEM_COUNT}}
                         </span>
@@ -163,25 +163,24 @@
                     {% endif %}
                 </div>
 
-                <div class="flex items-center gap-5">
-                    <a href="{% url 'wishlist' %}" class="group relative">
-                        <i
-                            class="fa-regular fa-heart text-2xl text-slate-600 group-hover:text-indigo-600 transition-colors"></i>
-                        <span id="wishlist-count"
-                            class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-white {% if WISHLIST_ITEM_COUNT == 0 %}hidden{% endif %}">
-                            {{WISHLIST_ITEM_COUNT}}
-                        </span>
-                    </a>
+            <div class="flex items-center gap-5">
+                <a href="{% url 'wishlist' %}" class="relative text-slate-600">
+                    <i class="fa-regular fa-heart text-xl"></i>
+                    <span id="wishlist-count"
+                        class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white {% if WISHLIST_ITEM_COUNT == 0 %}hidden{% endif %}">
+                        {{ WISHLIST_ITEM_COUNT }}
+                    </span>
+                </a>
+            
+                <a href="{% url 'cart' %}" class="relative text-slate-600">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
+                    <span id="cart-count"
+                        class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white {% if CART_ITEM_COUNT == 0 %}hidden{% endif %}">
+                        {{ CART_ITEM_COUNT }}
+                    </span>
+                </a>
+            </div>
 
-                    <a href="{% url 'cart' %}" class="group relative">
-                        <i
-                            class="fa-solid fa-bag-shopping text-2xl text-slate-600 group-hover:text-indigo-600 transition-colors"></i>
-                        <span id="cart-count"
-                            class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-white {% if CART_ITEM_COUNT == 0 %}hidden{% endif %}">
-                            {{CART_ITEM_COUNT}}
-                        </span>
-                    </a>
-                </div>
 
             </div>
         </div>

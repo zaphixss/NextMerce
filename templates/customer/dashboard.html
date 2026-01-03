@@ -226,13 +226,13 @@
                                     <h4 class="truncate text-sm font-medium text-slate-900">{{ item.product.name }}</h4>
                                     <p class="text-xs text-slate-500">${{ item.product.sale_price|intcomma }}</p>
                                 </div>
-                                <form method="POST" action="{% url 'add_cart' item.product.id %}">
-                                    {% csrf_token %}
-                                    <button
-                                        class="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 transition-all">
-                                        <i class="fa-solid fa-plus text-xs"></i>
-                                    </button>
-                                </form>
+                                <button type="button"
+                                    class="js-add-cart flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-blue-600 hover:text-white transition-colors"
+                                    data-url="{% url 'add_cart' item.product.id %}">
+                                     <i class="fa-solid fa-plus text-xs"></i>
+
+                                </button>
+                               
                             </div>
                             {% endfor %}
                         </div>
