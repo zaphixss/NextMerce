@@ -21,7 +21,7 @@ def vendor_dashboard(request):
     avg_rating = round(avg_rating, 1) if avg_rating else 0
 
     revenue_data = OrderItem.objects.filter(order__payment_status='Paid', product__user=user).aggregate(Sum("sub_total"))    
-    revenue = revenue_data['sub_total__sum'] or 0 # Handle None if no sales
+    revenue = revenue_data['sub_total__sum'] or 0 
     
     orders = (
         Order.objects
@@ -35,40 +35,29 @@ def vendor_dashboard(request):
         .order_by('-date') 
     )
 
-
-    # --- NEW: CHART DATA CALCULATIONS ---
-
-    # 1. REVENUE CHART (Area Chart)
-    # Group OrderItems by Month and Sum the sub_total
     monthly_revenue = (
         OrderItem.objects
         .filter(product__user=user, order__payment_status='Paid')
-        .annotate(month=TruncMonth('order__date')) # Make sure 'date' is the correct field name on OrderItem (or order__date)
+        .annotate(month=TruncMonth('order__date')) 
         .values('month')
         .annotate(total_revenue=Sum('sub_total'))
         .order_by('month')
     )
 
-    # Prepare lists for ApexCharts
     revenue_dates = []
     revenue_amounts = []
 
     for item in monthly_revenue:
-        # Convert date to string (e.g., "Jan")
         revenue_dates.append(item['month'].strftime('%b')) 
-        # Convert Decimal to float for JSON
         revenue_amounts.append(float(item['total_revenue']))
 
-
-    # 2. CATEGORY CHART (Donut Chart)
-    # Group OrderItems by Product Category and Sum sub_total (or Count)
-    # NOTE: Adjust 'product__category__title' to match your actual Category model field name (e.g. name, title)
+   
     category_sales = (
         OrderItem.objects
         .filter(product__user=user, order__payment_status='Paid')
         .values('product__category__title') 
         .annotate(total_sales=Sum('sub_total'))
-        .order_by('-total_sales') # Sort biggest first
+        .order_by('-total_sales') 
     )
 
     category_labels = []
@@ -86,7 +75,6 @@ def vendor_dashboard(request):
         'revenue': revenue,
         'orders': orders,
         
-        # Pass JSON strings to template
         'revenue_dates': json.dumps(revenue_dates),
         'revenue_amounts': json.dumps(revenue_amounts),
         'category_labels': json.dumps(category_labels),
@@ -283,12 +271,7 @@ def vendor_orders(request):
     }
     return render(request, 'vendor/orders.html', context)
 
-def vendor_order_delete(request, id):
-    order = Order.objects.get(id=id)
-    order.delete()
-    previous_url = request.META.get('HTTP_REFERER' )
-    
-    return redirect(previous_url)
+
 
 @login_required
 def vendor_order_detail(request, id):

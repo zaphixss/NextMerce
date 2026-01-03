@@ -10,7 +10,6 @@ urlpatterns = [
     path('dashboard/products/delete/<id>/', views.product_delete, name='vendor_delete_product'),
     path('dashboard/orders/', views.vendor_orders, name='vendor_orders'),
     path('dashboard/order/detail/<id>/', views.vendor_order_detail, name='order_detail'),
-    path('dashboard/order/delete/<id>/', views.vendor_order_delete, name='vendor_order_delete'),
     path('dashboard/customers/', views.vendor_customers, name='vendor_customers'),
     path('dashboard/reviews/', views.vendor_reviews, name='vendor_reviews'),
     path('dashboard/profile/', views.vendor_profile, name='vendor_profile'),

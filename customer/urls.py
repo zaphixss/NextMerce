@@ -4,7 +4,6 @@ from django.urls import path
 urlpatterns = [
     
     path('customer/dashboard/', views.customer_dashboard,  name='customer_dashboard'),
-    path('order/delete/<id>/', views.order_delete,  name='order_delete'),
     path('customer/orders/', views.customer_orders,  name='customer_orders'),
     path('customer/order/detail/<id>/', views.order_detail,  name='customer_order_detail'),
     path('customer/wishlist/', views.customer_wishlist,  name='customer_wishlist'),

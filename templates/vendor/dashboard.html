@@ -60,7 +60,7 @@
     </div>
 
     <main class="flex-1 px-4 lg:px-[5%] 2xl:px-[12%] p-8 pt-[2rem] overflow-y-auto h-full mobile-padding">
-            {% load humanize %}
+        {% load humanize %}
         <header class="flex flex-col min-[769px]:flex-row min-[769px]:items-center justify-between mb-8 gap-4">
             <div class="flex items-center justify-between w-full min-[769px]:w-auto">
                 <div>
@@ -93,7 +93,7 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-slate-500 mb-1">Total Revenue</p>
-                        <h3 class="text-2xl font-bold text-slate-900">${{revenue}}</h3>
+                        <h3 class="text-2xl font-bold text-slate-900">${{revenue|intcomma}}</h3>
                     </div>
                     <div class="p-3 bg-indigo-50 rounded-xl text-indigo-600"><i class="fa-solid fa-wallet text-lg"></i>
                     </div>
@@ -105,7 +105,7 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-slate-500 mb-1">Total Orders</p>
-                        <h3 class="text-2xl font-bold text-slate-900">{{orders_count.count}}</h3>
+                        <h3 class="text-2xl font-bold text-slate-900">{{orders.count}}</h3>
                     </div>
                     <div class="p-3 bg-blue-50 rounded-xl text-blue-600"><i
                             class="fa-solid fa-bag-shopping text-lg"></i></div>
@@ -178,8 +178,7 @@
                         {% for order in orders %}
                         <tr class="hover:bg-slate-50 transition-colors group">
                             <td class="px-6 py-4 font-bold text-indigo-600">
-                                <a href="{% url 'order_detail' order.id %}">#ORD-{{order.id}}</a>
-                               </td>
+                                #ORD-{{order.id}}</td>
                             <td class="px-6 py-4 text-slate-500">{{order.date}}</td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-2">
@@ -206,10 +205,10 @@
 
                             <td class="px-6 py-4 font-bold text-slate-900 text-right">${{order.vendor_total}}</td>
                             <td class="px-6 py-4 text-center mr-5 space-x-3">
-                                <a href="{% url 'vendor_order_delete' order.id %}" class="text-red-400 hover:text-blue-500 transition-colors">
-                                    <i class="fa-solid fa-trash-can"></i>
+                                <a href="{% url 'order_detail' order.id %}"
+                                    class="text-blue-400 hover:text-blue-500 transition-colors">
+                                    <i class="fa-regular fa-eye"></i>
                                 </a>
-                                
                                 
                             </td>
                         </tr>
@@ -223,7 +222,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 
     <script>
-        // --- DEBUGGING: Check if data is arriving ---
         const dates = {{ revenue_dates| safe }};
         const earnings = {{ revenue_amounts| safe }};
         const catLabels = {{ category_labels| safe }};
@@ -245,7 +243,7 @@
                 toolbar: { show: false },
                 fontFamily: 'Plus Jakarta Sans, sans-serif',
             },
-            // Show dots so single months are visible
+            
             markers: {
                 size: 5,
                 colors: ["#fff"],
@@ -267,7 +265,7 @@
                 labels: { style: { colors: '#64748b', fontSize: '12px' } }
             },
             yaxis: {
-                min: 0, // Force chart to start at $0
+                min: 0, 
                 labels: {
                     style: { colors: '#64748b', fontSize: '12px' },
                     formatter: function (value) { return "$" + value; }
@@ -281,7 +279,7 @@
         revenueChart.render();
 
 
-        // --- 2. CATEGORY CHART ---
+        
         const chartColors = ['#4f46e5', '#10b981', '#fbbf24', '#f43f5e', '#8b5cf6'];
 
         var categoryOptions = {
@@ -330,7 +328,7 @@
             tooltip: { enabled: true }
         };
 
-        // Only render if we have data
+       
         if (catData.length > 0) {
             var categoryChart = new ApexCharts(document.querySelector("#categoryChart"), categoryOptions);
             categoryChart.render();
@@ -339,11 +337,11 @@
         }
 
 
-        // --- 3. GENERATE CUSTOM LEGEND ---
+    
         const legendContainer = document.getElementById('customLegend');
 
         if (legendContainer && catData.length > 0) {
-            legendContainer.innerHTML = ''; // Clear old content
+            legendContainer.innerHTML = ''; // 
 
             const totalSales = catData.reduce((a, b) => a + b, 0);
 

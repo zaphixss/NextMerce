@@ -1,5 +1,5 @@
 {% extends 'partials/base.html' %}
-{% load static %}
+{% load static %}{% load humanize %}
 
 {% block content %}
 <div class="border-b border-gray-200 py-8 flex items-center justify-between px-4 md:px-8 lg:px-12 2xl:px-[19rem]">
@@ -82,9 +82,9 @@
             </div>
 
             <div class="mt-6 flex items-end gap-3">
-                <span class="text-3xl font-bold text-slate-900">${{product.sale_price}}</span>
+                <span class="text-3xl font-bold text-slate-900">${{product.sale_price|intcomma}}</span>
                 {% if product.regular_price %}
-                <span class="text-lg text-zinc-400 line-through mb-1">${{product.regular_price}}</span>
+                <span class="text-lg text-zinc-400 line-through mb-1">${{product.regular_price|intcomma}}</span>
                 {% endif %}
             </div>
 
@@ -133,20 +133,21 @@
                         <input type="number" name="qty" value="1" min="1"
                             class="w-full rounded-full border border-zinc-200 bg-white px-4 py-3 text-center text-sm font-bold text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all">
                     </div>
-
-                    <button type="submit"
-                        class="flex-1 sm:flex-none py-3 px-8 rounded-full bg-slate-900 text-sm font-bold text-white shadow-lg shadow-slate-200 hover:bg-slate-800 hover:-translate-y-0.5 transition-all">
+                    <button type="button"
+                        class="js-add-cart flex-1 sm:flex-none py-3 px-8 rounded-full bg-slate-900 text-sm font-bold text-white shadow-lg shadow-slate-200 hover:bg-slate-800 hover:-translate-y-0.5 transition-all"
+                        data-url="{% url 'add_cart' product.id %}">
                         Add to Cart
+                        <i class="fa-solid fa-cart-shopping text-sm"></i>
                     </button>
+                    
                 </form>
 
-                <a href="{% url 'add_wishlist' product.id %}" class="shrink-0">
-                    <button type="button"
-                        class="flex h-[46px] w-[46px] items-center justify-center rounded-full border border-zinc-200 bg-white text-slate-900 shadow-sm hover:bg-zinc-50 hover:text-red-500 hover:border-red-200 transition-all"
-                        aria-label="Wishlist">
-                        <i class="fa-regular fa-heart text-lg"></i>
-                    </button>
-                </a>
+                
+                <button type="button"
+                    class="js-wishlist flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-red-500 hover:text-white transition-colors"
+                    data-url="{% url 'add_wishlist' product.id %}">
+                    <i class="fa-regular fa-heart text-lg"></i>
+                </button>
             </div>
         </div>
     </div>

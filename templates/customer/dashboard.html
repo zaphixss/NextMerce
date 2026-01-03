@@ -1,6 +1,6 @@
 {% extends 'partials/base.html' %}
 {% load static %}
-
+{% load humanize %}
 {% block content %}
 <div class="sticky top-0 z-30 bg-white border-b border-gray-200 lg:hidden overflow-x-auto no-scrollbar">
     <div class="flex items-center gap-8 px-6">
@@ -103,7 +103,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Spent</p>
-                            <p class="text-2xl font-bold text-slate-900">₦{{total_spent}}</p>
+                            <p class="text-2xl font-bold text-slate-900">${{total_spent|intcomma}}</p>
                         </div>
                     </div>
                 </div>
@@ -146,7 +146,7 @@
                                 {% for order in orders|slice:":5" %}
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="px-6 py-4 font-medium text-slate-900">#{{order.id}}</td>
-                                    <td class="px-6 py-4 font-semibold text-slate-700">${{order.total}}</td>
+                                    <td class="px-6 py-4 font-semibold text-slate-700">${{order.total|intcomma}}</td>
                                     <td class="px-6 py-4">
                                         <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium
                                             {% if order.payment_status == 'Paid' %} bg-emerald-50 text-emerald-700 border border-emerald-100
@@ -164,10 +164,7 @@
                                         <a href="{% url 'customer_order_detail' order.id %}" class="text-blue-400 hover:text-blue-500 transition-colors">
                                             <i class="fa-regular fa-eye"></i>
                                         </a>
-                                        <a href="{% url 'order_delete' order.id %}"
-                                            class="text-slate-400 hover:text-red-500 transition-colors">
-                                            <i class="fa-solid fa-trash-can"></i>
-                                        </a>
+                                        
                                         
                                     </td>
                                 </tr>
@@ -227,7 +224,7 @@
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <h4 class="truncate text-sm font-medium text-slate-900">{{ item.product.name }}</h4>
-                                    <p class="text-xs text-slate-500">${{ item.product.sale_price }}</p>
+                                    <p class="text-xs text-slate-500">${{ item.product.sale_price|intcomma }}</p>
                                 </div>
                                 <form method="POST" action="{% url 'add_cart' item.product.id %}">
                                     {% csrf_token %}

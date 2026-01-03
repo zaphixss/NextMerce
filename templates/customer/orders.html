@@ -1,6 +1,6 @@
 {% extends 'partials/base.html' %}
 {% load static %}
-
+{% load humanize %}
 {% block content %}
 <div class="sticky top-0 z-30 bg-white border-b border-gray-200 lg:hidden overflow-x-auto no-scrollbar">
     <div class="flex items-center gap-8 px-6">
@@ -111,7 +111,7 @@
                                 <td class="px-6 py-4 font-medium text-slate-900">
                                     <span class="font-mono text-slate-500">#</span>{{order.id}}
                                 </td>
-                                <td class="px-6 py-4 font-bold text-slate-900">${{order.total}}</td>
+                                <td class="px-6 py-4 font-bold text-slate-900">${{order.total|intcomma}}</td>
                                 <td class="px-6 py-4">
                                     <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium border
                                         {% if order.payment_status == 'Paid' %} bg-emerald-50 text-emerald-700 border-emerald-100
@@ -133,10 +133,7 @@
                                         class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50 hover:text-indigo-600 transition-all">
                                         View Details
                                     </a>
-                                    <a href="{% url 'order_delete' order.id %}"
-                                        class="font-medium text-red-500 text-sm">
-                                        Delete
-                                    </a>
+                                   
                                 </td>
                             </tr>
                             {% endfor %}

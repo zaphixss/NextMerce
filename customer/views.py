@@ -24,11 +24,6 @@ def customer_dashboard(request):
     }
     return render(request, 'customer/dashboard.html', context)
 
-def order_delete(request, id):
-    order =  Order.objects.get(id=id)
-    order.delete()
-    return redirect('customer_dashboard')
-
 def customer_orders(request):
     orders = Order.objects.filter(user=request.user)
     context = {
