@@ -285,11 +285,7 @@ def vendor_orders(request):
 
 def vendor_order_delete(request, id):
     order = Order.objects.get(id=id)
-    
     order.delete()
-    
-    messages.success(request, "Order deleted successfully!")
-    
     previous_url = request.META.get('HTTP_REFERER' )
     
     return redirect(previous_url)
