@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Category,Product, Cart, Wishlist, Order, OrderItem, Reviews
+from .models import Category,Product, Cart, Wishlist, Order, OrderItem, Reviews, Contact_Message
 from django.contrib import messages
 from decimal import Decimal
 from django.db.models import Sum
@@ -106,6 +106,23 @@ def about_view(request):
     return render(request, 'pages/about.html')
 
 def contact_view(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        contact_message = Contact_Message(
+            name=name,
+            email=email,
+            phone=phone,
+            subject=subject,
+            message=message
+        )
+        contact_message.save()
+        messages.success(request, "Your message has been sent successfully.")
+        return redirect('contact')
     return render(request, 'pages/contact.html')
 
 def faq_view(request):

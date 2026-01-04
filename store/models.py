@@ -154,3 +154,13 @@ class Reviews(models.Model):
         else:
             return "Review (No Product)"
         
+class Contact_Message(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(null=True, blank=True)
+    phone = models.CharField(max_length=15)
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name
