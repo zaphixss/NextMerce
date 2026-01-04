@@ -54,21 +54,18 @@
                 <div class="flex items-center gap-5">
                     <a href="{% url 'wishlist' %}" class="relative text-slate-600">
                         <i class="fa-regular fa-heart text-xl"></i>
-                        {% if WISHLIST_ITEM_COUNT > 0 %}
                         <span id="wishlist-count"
-                            class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white">
-                            {{WISHLIST_ITEM_COUNT}}
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white {% if WISHLIST_ITEM_COUNT == 0 %}hidden{% endif %}">
+                            {{ WISHLIST_ITEM_COUNT }}
                         </span>
-                        {% endif %}
                     </a>
+
                     <a href="{% url 'cart' %}" class="relative text-slate-600">
                         <i class="fa-solid fa-bag-shopping text-xl"></i>
-                        {% if CART_ITEM_COUNT > 0 %}
-                        <span id="cart-count"
-                            class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white">
-                            {{CART_ITEM_COUNT}}
+                        <span id=""
+                            class="cart-count-desk absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white {% if CART_ITEM_COUNT == 0 %}hidden{% endif %}">
+                            {{ CART_ITEM_COUNT }}
                         </span>
-                        {% endif %}
                     </a>
                 </div>
 
@@ -163,23 +160,23 @@
                     {% endif %}
                 </div>
 
-            <div class="flex items-center gap-5">
-                <a href="{% url 'wishlist' %}" class="relative text-slate-600">
-                    <i class="fa-regular fa-heart text-xl"></i>
-                    <span id="wishlist-count"
-                        class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white {% if WISHLIST_ITEM_COUNT == 0 %}hidden{% endif %}">
-                        {{ WISHLIST_ITEM_COUNT }}
-                    </span>
-                </a>
-            
-                <a href="{% url 'cart' %}" class="relative text-slate-600">
-                    <i class="fa-solid fa-bag-shopping text-xl"></i>
-                    <span id="cart-count"
-                        class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white {% if CART_ITEM_COUNT == 0 %}hidden{% endif %}">
-                        {{ CART_ITEM_COUNT }}
-                    </span>
-                </a>
-            </div>
+                <div class="flex items-center gap-5">
+                    <a href="{% url 'wishlist' %}" class="relative text-slate-600">
+                        <i class="fa-regular fa-heart text-xl"></i>
+                        <span id="wishlist-count"
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white {% if WISHLIST_ITEM_COUNT == 0 %}hidden{% endif %}">
+                            {{ WISHLIST_ITEM_COUNT }}
+                        </span>
+                    </a>
+
+                    <a href="{% url 'cart' %}" class="relative text-slate-600">
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        <span
+                            class="cart-count-mobile absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white {% if CART_ITEM_COUNT == 0 %}hidden{% endif %}">
+                            {{ CART_ITEM_COUNT }}
+                        </span>
+                    </a>
+                </div>
 
 
             </div>
@@ -189,10 +186,12 @@
             <div class="flex items-center justify-between py-3 px-4 md:px-8 lg:px-12 2xl:px-[19rem]">
                 <ul class="flex items-center gap-8 text-sm font-semibold text-slate-600">
                     <li><a href="{% url 'index' %}" class="hover:text-indigo-600 transition-colors">Home</a></li>
-                    <li><a href="{% url 'best_selling' %}" class="hover:text-indigo-600 transition-colors">Popular</a></li>
+                    <li><a href="{% url 'best_selling' %}" class="hover:text-indigo-600 transition-colors">Popular</a>
+                    </li>
                     <li><a href="{% url 'shop' %}" class="hover:text-indigo-600 transition-colors">Shop</a></li>
-                    <li><a href="{% url 'vendor_dashboard' %}" class="hover:text-indigo-600 transition-colors">Vendor Dashboard</a></li>
-                        
+                    <li><a href="{% url 'vendor_dashboard' %}" class="hover:text-indigo-600 transition-colors">Vendor
+                            Dashboard</a></li>
+
 
                 </ul>
 
@@ -426,9 +425,9 @@
         // --- 1. Toast Configuration ---
         const Toast = Swal.mixin({
             toast: true,
-            position: 'top-end',
+            position: 'top-start',
             showConfirmButton: false,
-            timer: 3000,
+            timer: 1000,
             timerProgressBar: true,
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -471,11 +470,16 @@
 
                 try {
                     const data = await postForm(url, fd);
-                    const cartCountEl = document.querySelector("#cart-count");
-                    if (cartCountEl && data.cartCount !== undefined) {
-                        cartCountEl.textContent = data.cartCount;
-                        cartCountEl.classList.remove("hidden");
-                    }
+                    console.log(data.cartCount);
+
+                    const cartCountElDe = document.querySelector(".cart-count-desk");
+                    const cartCountElMo = document.querySelector(".cart-count-mobile");
+                    
+                    cartCountElDe.textContent = data.cartCount
+                    cartCountElMo.textContent = data.cartCount
+
+                    cartCountElDe.classList.remove("hidden");
+                    cartCountElMo.classList.remove("hidden");
 
                     // PRETTY ALERT
                     Toast.fire({
@@ -493,6 +497,8 @@
                 }
                 return;
             }
+
+
 
             // --- WISHLIST TOGGLE ---
             const wishBtn = e.target.closest(".js-wishlist");
