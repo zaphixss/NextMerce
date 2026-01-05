@@ -76,13 +76,12 @@
         </div>
     
         <div class="col-span-2 flex justify-start md:justify-end mt-2 md:mt-0">
-            <form method="POST" action="{% url 'add_cart' w.id%}">
-                {% csrf_token %}
-                <button
-                    class="rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-bold text-white hover:bg-indigo-700 transition-colors shadow-sm">
-                    Add to Cart
-                </button>
-            </form>
+            <button type="button"
+                class="js-add-cart rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-bold text-white hover:bg-indigo-700 transition-colors shadow-sm"
+                data-url="{% url 'add_cart' w.product.id %}">
+                Add to Cart
+            
+            </button>
         </div>
     
     </div>

@@ -54,7 +54,7 @@
                 <div class="flex items-center gap-5">
                     <a href="{% url 'wishlist' %}" class="relative text-slate-600">
                         <i class="fa-regular fa-heart text-xl"></i>
-                        <span id="wishlist-count"
+                        <span id="wishlist-count-2"
                             class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-white {% if WISHLIST_ITEM_COUNT == 0 %}hidden{% endif %}">
                             {{ WISHLIST_ITEM_COUNT }}
                         </span>
@@ -517,6 +517,7 @@
                     }
 
                     const wishCountEl = document.querySelector("#wishlist-count");
+                    const wishCountEl2 = document.querySelector("#wishlist-count-2");
                     if (wishCountEl && data.wishlistCount !== undefined) {
                         wishCountEl.textContent = data.wishlistCount;
                         if (data.wishlistCount > 0) {
@@ -525,7 +526,14 @@
                             wishCountEl.classList.add("hidden");
                         }
                     }
-
+                    if (wishCountEl2 && data.wishlistCount !== undefined) {
+                        wishCountEl2.textContent = data.wishlistCount;
+                        if (data.wishlistCount > 0) {
+                            wishCountEl2.classList.remove("hidden");
+                        } else {
+                            wishCountEl2.classList.add("hidden");
+                        }
+                    }
                     // PRETTY ALERT
                     Toast.fire({
                         icon: 'success',

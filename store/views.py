@@ -161,6 +161,12 @@ def add_to_cart(request, id):
         return redirect(request.META.get("HTTP_REFERER", "/"))
 
     try:
+        if product.qty == 0 or product.in_stock == False:
+            msg = "Product is out of stock"
+            if is_ajax(request):
+                return JsonResponse({"ok": False, "message": msg}, status=400)
+            messages.warning(request, msg)
+            return redirect(request.META.get("HTTP_REFERER", "/"))
         with transaction.atomic():
             item, created = Cart.objects.get_or_create(
                 user=request.user,
